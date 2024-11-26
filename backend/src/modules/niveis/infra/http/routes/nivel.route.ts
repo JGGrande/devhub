@@ -24,12 +24,35 @@ const nivelController = new NivelController()
   *         content:
   *           application/json:
   *             schema:
-  *               $ref: '#/components/schemas/CreateNivelResponseSchema'
+  *               $ref: '#/components/schemas/NivelSchema'
   *       400:
   *         description: Corpo da requisição inválido.
   *       500:
   *         description: Erro interno do servidor.
   */
 nivelRoutes.post("/", nivelController.create);
+/**
+  * @openapi
+  * /niveis:
+  *   get:
+  *     summary: Listar todos os níveis
+  *     description: Endpoint para listar todos os níveis no sistema.
+  *     tags:
+  *       - Nível
+  *     responses:
+  *       200:
+  *         description: Lista de níveis retornada com sucesso.
+  *         content:
+  *           application/json:
+  *             schema:
+  *               type: array
+  *               items:
+  *                 $ref: '#/components/schemas/NivelSchema'
+  *       404:
+  *         description: Nenhum nível cadastrado.
+  *       500:
+  *         description: Erro interno do servidor.
+  */
+nivelRoutes.get("/", nivelController.findAll);
 
 export { nivelRoutes };

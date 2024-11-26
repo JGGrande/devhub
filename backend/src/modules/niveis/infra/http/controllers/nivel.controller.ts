@@ -4,9 +4,10 @@ import { Request, Response } from "express";
 import { nivelContainer } from "../../di/nivel.container";
 import { CreateNivelUseCase } from "@modules/niveis/application/usecases/create-nivel.usecase";
 import { NivelPresenter } from "../presenters/nivel.presenter";
+import { FindAllNivelUseCase } from "@modules/niveis/application/usecases/find-all-nivel.usecase";
 
 export class NivelController {
-  public async create(request: Request, response: Response){
+  public async create(request: Request, response: Response): Promise<Response>{
     const createBodySchema = z.object({
       nivel: z
         .string()
@@ -24,6 +25,14 @@ export class NivelController {
     return response
       .status(201)
       .json(NivelPresenter.toHttpResponse(nivelCreated));
+  }
+
+  public async findAll(request: Request, response: Response): Promise<Response>{
+    const findAllNivelUseCase = nivelContainer.resolve(FindAllNivelUseCase);
+
+    const niveis = await findAllNivelUseCase.execute();
+
+    return response.json(NivelPresenter.fromArrayToHttpResponse(niveis));
   }
 
 }

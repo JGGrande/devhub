@@ -7,4 +7,11 @@ export class NivelPresenter {
       nivel: nivel.nivel
     };
   };
+
+  static fromArrayToHttpResponse(niveis: Nivel[]){
+    return niveis.map(nivel => ({
+      id: nivel.id,
+      nivel: nivel.nivel
+    }));
+  }
 }

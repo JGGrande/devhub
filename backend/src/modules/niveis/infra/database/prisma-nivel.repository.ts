@@ -28,4 +28,12 @@ export class PrismaNivelRepository implements INivelRepository {
     return nivelInstance;
   }
 
+  public async findAll(): Promise<Nivel[]> {
+    const niveis = await this.prisma.niveis.findMany();
+
+    const niveisInstance = niveis.map(nivel => new Nivel(nivel));
+
+    return niveisInstance;
+  }
+
 }

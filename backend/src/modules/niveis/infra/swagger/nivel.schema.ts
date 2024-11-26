@@ -8,7 +8,7 @@ export const CreateNivelRequestSchema = {
   }
 }
 
-export const CreateNivelResponseSchema = {
+export const NivelSchema = {
   type: "object",
   properties: {
     id: {

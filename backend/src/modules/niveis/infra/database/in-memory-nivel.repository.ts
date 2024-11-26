@@ -19,4 +19,8 @@ export class InMemoryNivelRepository implements INivelRepository {
 
     return newNivel;
   }
+
+  public async findAll(): Promise<Nivel[]> {
+    return this.niveis;
+  }
 }
