@@ -5,5 +5,7 @@ export interface INivelRepository {
   create({}: CreateNivelDto): Promise<Nivel>;
   findAll(): Promise<Nivel[]>;
   findById(id: number): Promise<Nivel | null>;
+  exitsById(id: number): Promise<boolean>;
   update({}: Nivel): Promise<Nivel>;
+  delete(id: number): Promise<void>;
 }

@@ -1,6 +1,7 @@
 import { inject, injectable } from "inversify";
 import { INivelRepository } from "@modules/niveis/domain/repositories/nivel.repository";
 import AppError from "@shared/errors/AppError";
+import { Nivel } from "@modules/niveis/domain/entities/nivel";
 
 @injectable()
 export class UpdateNivelUseCase {
@@ -9,7 +10,7 @@ export class UpdateNivelUseCase {
     private readonly nivelRepository: INivelRepository
   ){ }
 
-  async execute(id: number, nivel: string){
+  public async execute(id: number, nivel: string): Promise<Nivel> {
     const nivelAlreadyExits = await this.nivelRepository.findById(id);
 
     if(!nivelAlreadyExits){

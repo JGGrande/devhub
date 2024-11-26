@@ -30,11 +30,25 @@ export class InMemoryNivelRepository implements INivelRepository {
     return nivel || null;
   }
 
+  public async exitsById(id: number): Promise<boolean> {
+    const nivelExits = this.niveis.find(nivel => nivel.id === id);
+
+    return Boolean(nivelExits)
+  }
+
   public async update({ id, nivel }: Nivel): Promise<Nivel> {
     const nivelIndex = this.niveis.findIndex(nivel => nivel.id === id);
 
     this.niveis[nivelIndex].nivel = nivel;
 
     return this.niveis[nivelIndex];
+  }
+
+  public async delete(id: number): Promise<void> {
+    const nivelIndex = this.niveis.findIndex(nivel => nivel.id === id);
+
+    const numberOfElementsToDelete = 1;
+
+    this.niveis.splice(nivelIndex, numberOfElementsToDelete);
   }
 }

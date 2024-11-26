@@ -88,7 +88,31 @@ nivelRoutes.get("/", nivelController.findAll);
   *       500:
   *         description: Erro interno do servidor.
   */
-
 nivelRoutes.put("/:id", nivelController.update);
+
+/**
+  * @openapi
+  * /niveis/{id}:
+  *   delete:
+  *     summary: Deletar um nível
+  *     description: Endpoint para deletar nível no sistema.
+  *     tags:
+  *       - Nível
+  *     parameters:
+  *       - in: path
+  *         name: id
+  *         required: true
+  *         schema:
+  *           type: integer
+  *     responses:
+  *       204:
+  *         description: Nível deletado com sucesso.
+  *       404:
+  *         description: Nível não encontrado.
+  *       500:
+  *         description: Erro interno do servidor.
+  */
+
+nivelRoutes.delete("/:id", nivelController.delete);
 
 export { nivelRoutes };

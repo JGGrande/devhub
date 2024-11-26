@@ -50,6 +50,15 @@ export class PrismaNivelRepository implements INivelRepository {
     return nivelInstance;
   }
 
+  public async exitsById(id: number): Promise<boolean> {
+    const nivelExits = await this.prisma.niveis.findUnique({
+      where: { id },
+      select: { id: true }
+    });
+
+    return Boolean(nivelExits);
+  }
+
   public async update({ id, nivel }: Nivel): Promise<Nivel> {
     const nivelUpdated = await this.prisma.niveis.update({
       where: { id },
@@ -62,5 +71,11 @@ export class PrismaNivelRepository implements INivelRepository {
     });
 
     return nivelInstance;
+  }
+
+  public async delete(id: number): Promise<void> {
+    await this.prisma.niveis.delete({
+      where: { id }
+    });
   }
 }

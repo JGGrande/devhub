@@ -6,6 +6,7 @@ import { CreateNivelUseCase } from "@modules/niveis/application/usecases/create-
 import { NivelPresenter } from "../presenters/nivel.presenter";
 import { FindAllNivelUseCase } from "@modules/niveis/application/usecases/find-all-nivel.usecase";
 import { UpdateNivelUseCase } from "@modules/niveis/application/usecases/update-nivel.usecase";
+import { DeleteNivelUseCase } from "@modules/niveis/application/usecases/delete-nivel.usecase";
 
 export class NivelController {
   public async create(request: Request, response: Response): Promise<Response>{
@@ -64,6 +65,28 @@ export class NivelController {
     const nivelUpdated = await updateNivelUseCase.execute(id, nivel);
 
     return response.json(NivelPresenter.toHttpResponse(nivelUpdated));
+  }
+
+  public async delete(request: Request, response: Response): Promise<Response>{
+    const deleteParamsSchema = z.object({
+      id: z
+        .number({
+          coerce: true,
+          message: "ID deve ser um número."
+        })
+        .int({ message: "ID deve ser um número inteiro." })
+        .positive({  message: "ID deve ser um número positivo." })
+    });
+
+    const { id } = deleteParamsSchema.parse(request.params);
+
+    const deleteNivelUseCase = nivelContainer.resolve(DeleteNivelUseCase);
+
+    await deleteNivelUseCase.execute(id);
+
+    const noContentStatusCode = 204;
+
+    return response.sendStatus(noContentStatusCode);
   }
 
 }
