@@ -7,3 +7,10 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model niveis {
+  id    Int    @id @default(autoincrement())
+  nivel String @db.VarChar()
+
+  @@map("niveis")
+}
