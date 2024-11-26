@@ -1,5 +1,5 @@
 import { injectable } from "inversify";
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient, niveis as PrismaNivel } from "@prisma/client";
 import { prisma } from "@shared/infra/database/prisma";
 import { INivelRepository } from "@modules/niveis/domain/repositories/nivel.repository";
 import { CreateNivelDto } from "@modules/niveis/application/dtos/create-nivel.dto";
@@ -29,11 +29,20 @@ export class PrismaNivelRepository implements INivelRepository {
     return nivelInstance;
   }
 
-  public async findAll({ skip, take }: FindAllNivelDto): Promise<Nivel[]> {
-    const niveis = await this.prisma.niveis.findMany({
-      skip,
-      take
-    });
+  public async findAll({ skip, take, searchTerm }: FindAllNivelDto): Promise<Nivel[]> {
+    const niveis = await this.prisma.$queryRaw<PrismaNivel[]>`
+      SELECT
+        id,
+        nivel
+      FROM niveis
+      ${
+        searchTerm
+          ? Prisma.sql`WHERE unaccent("nivel") ILIKE unaccent('%' || ${searchTerm} || '%')`
+          : Prisma.sql``
+      }
+      OFFSET ${skip}
+      LIMIT ${take};
+    `;
 
     const niveisInstance = niveis.map(nivel => new Nivel(nivel));
 
@@ -63,10 +72,18 @@ export class PrismaNivelRepository implements INivelRepository {
     return Boolean(nivelExits);
   }
 
-  public async count(): Promise<number> {
-    const totalNiveis = await this.prisma.niveis.count();
+  public async count(searchTerm?: string): Promise<number> {
+    const totalNiveis = await this.prisma.$queryRaw<{ count: BigInt }[]>`
+      SELECT COUNT(id)
+      FROM niveis
+      ${
+        searchTerm
+          ? Prisma.sql`WHERE unaccent("nivel") ILIKE unaccent('%' || ${searchTerm} || '%')`
+          : Prisma.sql``
+      };
+    `;
 
-    return totalNiveis;
+    return Number(totalNiveis[0].count);
   }
 
   public async update({ id, nivel }: Nivel): Promise<Nivel> {

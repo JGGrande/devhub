@@ -33,9 +33,9 @@ describe("FindAllNivelUseCase", () => {
   it("should throw an error when no niveis are found", async () => {
     const findAllNivelUseCase = new FindAllNivelUseCase(nivelRepository);
 
-    try{
+    try {
       await findAllNivelUseCase.execute({ page: 1, limit: 10 });
-    }catch(error){
+    } catch (error) {
       expect(error).toBeInstanceOf(AppError);
       expect(error).toHaveProperty('statusCode', 404);
     }
@@ -74,4 +74,36 @@ describe("FindAllNivelUseCase", () => {
       last_page: 2
     });
   });
+
+  it("should return filtered níveis based on searchTerm", async () => {
+    const mockNiveis: Nivel[] = [
+      new Nivel({ id: 1, nivel: "Júnior 1" }),
+      new Nivel({ id: 2, nivel: "Júnior 2" }),
+      new Nivel({ id: 3, nivel: "Pleno 1" }),
+      new Nivel({ id: 4, nivel: "Pleno 2" }),
+    ];
+
+    mockNiveis.forEach(nivel => {
+      nivelRepository.create(nivel);
+    });
+
+    const findAllNivelUseCase = new FindAllNivelUseCase(nivelRepository);
+
+    const searchTerm = 'junior';
+
+    const result = await findAllNivelUseCase.execute({
+      page: 1,
+      limit: 10,
+      searchTerm
+    });
+
+    expect(result.data).toEqual([mockNiveis[0], mockNiveis[1]]);
+    expect(result.meta).toEqual({
+      total: 2,
+      current_page: 1,
+      per_page: 10,
+      last_page: 1
+    });
+  });
+
 });

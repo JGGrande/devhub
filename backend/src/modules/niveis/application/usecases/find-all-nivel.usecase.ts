@@ -8,6 +8,7 @@ import { getPaginationMeta } from "@shared/functions/pagination";
 type FindAllNivelUseCaseProps = {
   page: number;
   limit: number;
+  searchTerm?: string;
 }
 
 @injectable()
@@ -17,16 +18,17 @@ export class FindAllNivelUseCase {
     private readonly nivelRepository: INivelRepository
   ){ }
 
-  public async execute({ page, limit }: FindAllNivelUseCaseProps): Promise<PaginatedContent<Nivel>>{
+  public async execute({ page, limit, searchTerm }: FindAllNivelUseCaseProps): Promise<PaginatedContent<Nivel>>{
     const skip = (page - 1) * limit;
 
     const [ niveis, totalNiveis ] = await Promise.all([
       this.nivelRepository.findAll({
         skip,
-        take: limit
+        take: limit,
+        searchTerm
       }),
-      this.nivelRepository.count()
-    ])
+      this.nivelRepository.count(searchTerm)
+    ]);
 
     const niveisIsEmpty = totalNiveis === 0;
 

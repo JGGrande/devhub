@@ -55,6 +55,13 @@ nivelRoutes.post("/", nivelController.create);
   *         schema:
   *           type: integer
   *           example: 25
+  *       - in: query
+  *         name: searchTerm
+  *         required: false
+  *         description: Termo de busca
+  *         schema:
+  *           type: string
+  *           example: junior
   *     responses:
   *       200:
   *         description: Lista de níveis retornada com sucesso.

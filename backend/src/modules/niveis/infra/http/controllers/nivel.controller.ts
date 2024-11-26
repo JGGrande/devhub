@@ -48,16 +48,23 @@ export class NivelController {
         .int({ message: "Limit deve ser um número inteiro." })
         .positive({  message: "Limite deve ser um número positivo." })
         .optional()
-        .default(25)
+        .default(25),
+      searchTerm: z
+        .string({ message: "Termo de busca deve ser uma string." })
+        .trim()
+        .min(1, { message: "Termo de busca deve conter pelo menos 1 carácter." })
+        .max(255, { message: "Termo de busca não pode conter mais de 255 caracteres." })
+        .optional()
     });
 
-    const { page, limit } = findAllQuerySchema.parse(request.query);
+    const { page, limit, searchTerm } = findAllQuerySchema.parse(request.query);
 
     const findAllNivelUseCase = nivelContainer.resolve(FindAllNivelUseCase);
 
     const niveis = await findAllNivelUseCase.execute({
       page,
-      limit
+      limit,
+      searchTerm
     });
 
     return response.json(NivelPresenter.fromArrayToHttpResponse(niveis));

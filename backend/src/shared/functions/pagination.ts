@@ -4,7 +4,7 @@ type GetPaginationMetaProps = {
   limit: number;
 }
 export function getPaginationMeta({ total, limit, page }: GetPaginationMetaProps){
-  const lastPage = Math.ceil(total / limit);
+  const lastPage = total && limit ? Math.ceil(total / limit) : 1;
 
   return {
     total: total,

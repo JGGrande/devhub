@@ -7,7 +7,7 @@ export interface INivelRepository {
   findAll({}: FindAllNivelDto): Promise<Nivel[]>;
   findById(id: number): Promise<Nivel | null>;
   exitsById(id: number): Promise<boolean>;
-  count(): Promise<number>;
+  count(searchTerm?: string): Promise<number>;
   update({}: Nivel): Promise<Nivel>;
   delete(id: number): Promise<void>;
 }

@@ -21,10 +21,24 @@ export class InMemoryNivelRepository implements INivelRepository {
     return newNivel;
   }
 
-  public async findAll({ skip, take }: FindAllNivelDto): Promise<Nivel[]> {
-    return this.niveis.slice(skip, skip + take);
-  }
+  public async findAll({ skip, take, searchTerm }: FindAllNivelDto): Promise<Nivel[]> {
+    let filteredNiveis = this.niveis;
 
+    if (searchTerm) {
+      const normalizeString = (str: string) => str
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase();
+
+      const normalizedSearchTerm = normalizeString(searchTerm);
+
+      filteredNiveis = filteredNiveis.filter(({ nivel }) =>
+        normalizeString(nivel).includes(normalizedSearchTerm)
+      );
+    }
+
+    return filteredNiveis.slice(skip, skip + take);
+  }
   public async findById(id: number): Promise<Nivel | null> {
     const nivel = this.niveis.find(nivel => nivel.id === id);
 
@@ -37,8 +51,23 @@ export class InMemoryNivelRepository implements INivelRepository {
     return Boolean(nivelExits)
   }
 
-  public async count(): Promise<number> {
-    return this.niveis.length;
+  public async count(searchTerm?: string): Promise<number> {
+    if (!searchTerm) {
+      return this.niveis.length;
+    }
+
+    const normalizeString = (str: string) => str
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+
+    const normalizedSearchTerm = normalizeString(searchTerm);
+
+    const filteredNiveis = this.niveis.filter(({ nivel }) =>
+      normalizeString(nivel).includes(normalizedSearchTerm)
+    );
+
+    return filteredNiveis.length;
   }
 
   public async update({ id, nivel }: Nivel): Promise<Nivel> {
