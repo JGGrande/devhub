@@ -25,7 +25,7 @@ describe("FindAllNivelUseCase", () => {
 
     const findAllNivelUseCase = new FindAllNivelUseCase(nivelRepository);
 
-    const result = await findAllNivelUseCase.execute();
+    const result = await findAllNivelUseCase.execute({ page: 1, limit: 10 });
 
     expect(result).toEqual(mockNiveis);
   });
@@ -34,10 +34,46 @@ describe("FindAllNivelUseCase", () => {
     const findAllNivelUseCase = new FindAllNivelUseCase(nivelRepository);
 
     try{
-      await findAllNivelUseCase.execute();
+      await findAllNivelUseCase.execute({ page: 1, limit: 10 });
     }catch(error){
       expect(error).toBeInstanceOf(AppError);
       expect(error).toHaveProperty('statusCode', 404);
     }
+  });
+
+  it("should return paginated níveis", async () => {
+    const mockNiveis: Nivel[] = [
+      new Nivel({ id: 1, nivel: "Junior 1" }),
+      new Nivel({ id: 2, nivel: "Junior 2" }),
+      new Nivel({ id: 3, nivel: "Pleno 1" }),
+      new Nivel({ id: 4, nivel: "Pleno 2" }),
+    ];
+
+    mockNiveis.forEach(nivel => {
+      nivelRepository.create(nivel);
+    });
+
+    const findAllNivelUseCase = new FindAllNivelUseCase(nivelRepository);
+
+    const resultPage1 = await findAllNivelUseCase.execute({ page: 1, limit: 2 });
+    const resultPage2 = await findAllNivelUseCase.execute({ page: 2, limit: 2 });
+
+    console.debug({ resultPage2 });
+
+    expect(resultPage1.data).toEqual([mockNiveis[0], mockNiveis[1]]);
+    expect(resultPage1.meta).toEqual({
+      total: 4,
+      current_page: 1,
+      per_page: 2,
+      last_page: 2
+    });
+
+    expect(resultPage2.data).toEqual([mockNiveis[2], mockNiveis[3]]);
+    expect(resultPage2.meta).toEqual({
+      total: 4,
+      current_page: 2,
+      per_page: 2,
+      last_page: 2
+    });
   });
 });

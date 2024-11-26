@@ -4,6 +4,7 @@ import { prisma } from "@shared/infra/database/prisma";
 import { INivelRepository } from "@modules/niveis/domain/repositories/nivel.repository";
 import { CreateNivelDto } from "@modules/niveis/application/dtos/create-nivel.dto";
 import { Nivel } from "@modules/niveis/domain/entities/nivel";
+import { FindAllNivelDto } from "@modules/niveis/application/dtos/find-all-nivel.dto";
 
 @injectable()
 export class PrismaNivelRepository implements INivelRepository {
@@ -28,8 +29,11 @@ export class PrismaNivelRepository implements INivelRepository {
     return nivelInstance;
   }
 
-  public async findAll(): Promise<Nivel[]> {
-    const niveis = await this.prisma.niveis.findMany();
+  public async findAll({ skip, take }: FindAllNivelDto): Promise<Nivel[]> {
+    const niveis = await this.prisma.niveis.findMany({
+      skip,
+      take
+    });
 
     const niveisInstance = niveis.map(nivel => new Nivel(nivel));
 
@@ -57,6 +61,12 @@ export class PrismaNivelRepository implements INivelRepository {
     });
 
     return Boolean(nivelExits);
+  }
+
+  public async count(): Promise<number> {
+    const totalNiveis = await this.prisma.niveis.count();
+
+    return totalNiveis;
   }
 
   public async update({ id, nivel }: Nivel): Promise<Nivel> {

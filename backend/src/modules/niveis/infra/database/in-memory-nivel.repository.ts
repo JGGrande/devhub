@@ -2,6 +2,7 @@ import { injectable } from "inversify";
 import { Nivel } from "@modules/niveis/domain/entities/nivel";
 import { INivelRepository } from "@modules/niveis/domain/repositories/nivel.repository";
 import { CreateNivelDto } from "@modules/niveis/application/dtos/create-nivel.dto";
+import { FindAllNivelDto } from "@modules/niveis/application/dtos/find-all-nivel.dto";
 
 @injectable()
 export class InMemoryNivelRepository implements INivelRepository {
@@ -20,8 +21,8 @@ export class InMemoryNivelRepository implements INivelRepository {
     return newNivel;
   }
 
-  public async findAll(): Promise<Nivel[]> {
-    return this.niveis;
+  public async findAll({ skip, take }: FindAllNivelDto): Promise<Nivel[]> {
+    return this.niveis.slice(skip, skip + take);
   }
 
   public async findById(id: number): Promise<Nivel | null> {
@@ -34,6 +35,10 @@ export class InMemoryNivelRepository implements INivelRepository {
     const nivelExits = this.niveis.find(nivel => nivel.id === id);
 
     return Boolean(nivelExits)
+  }
+
+  public async count(): Promise<number> {
+    return this.niveis.length;
   }
 
   public async update({ id, nivel }: Nivel): Promise<Nivel> {
