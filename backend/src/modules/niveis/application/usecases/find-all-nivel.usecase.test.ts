@@ -36,7 +36,7 @@ describe("FindAllNivelUseCase", () => {
     try{
       await findAllNivelUseCase.execute();
     }catch(error){
-      expect(error).instanceOf(AppError);
+      expect(error).toBeInstanceOf(AppError);
       expect(error).toHaveProperty('statusCode', 404);
     }
   });
