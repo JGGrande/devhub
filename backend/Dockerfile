@@ -8,7 +8,7 @@ WORKDIR /home/root/app
 
 COPY . .
 
-RUN yarn install --force
+RUN npm install --force
 
 RUN if [ -d "dist" ]; then rm -r dist; fi
 
