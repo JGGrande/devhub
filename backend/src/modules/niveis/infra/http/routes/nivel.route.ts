@@ -31,6 +31,7 @@ const nivelController = new NivelController()
   *         description: Erro interno do servidor.
   */
 nivelRoutes.post("/", nivelController.create);
+
 /**
   * @openapi
   * /niveis:
@@ -54,5 +55,40 @@ nivelRoutes.post("/", nivelController.create);
   *         description: Erro interno do servidor.
   */
 nivelRoutes.get("/", nivelController.findAll);
+
+/**
+  * @openapi
+  * /niveis/{id}:
+  *   put:
+  *     summary: Alterar um nível
+  *     description: Endpoint para alterar nível no sistema.
+  *     tags:
+  *       - Nível
+  *     parameters:
+  *       - in: path
+  *         name: id
+  *         required: true
+  *         schema:
+  *           type: integer
+  *     requestBody:
+  *       required: true
+  *       content:
+  *         application/json:
+  *           schema:
+  *             $ref: '#/components/schemas/UpdateNivelRequestSchema'
+  *     responses:
+  *       200:
+  *         description: nível atualizado retornado com sucesso.
+  *         content:
+  *           application/json:
+  *             schema:
+  *               $ref: '#/components/schemas/NivelSchema'
+  *       404:
+  *         description: Nível não encontrado.
+  *       500:
+  *         description: Erro interno do servidor.
+  */
+
+nivelRoutes.put("/:id", nivelController.update);
 
 export { nivelRoutes };

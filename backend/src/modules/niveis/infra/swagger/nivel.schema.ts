@@ -8,6 +8,16 @@ export const CreateNivelRequestSchema = {
   }
 }
 
+export const UpdateNivelRequestSchema = {
+  type: "object",
+  properties: {
+    nivel: {
+      type: "string",
+      example: "Sênior"
+    }
+  }
+}
+
 export const NivelSchema = {
   type: "object",
   properties: {

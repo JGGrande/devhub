@@ -1,7 +1,7 @@
 import { env } from "@shared/env";
 import swaggerJSDoc from "swagger-jsdoc";
 
-import { CreateNivelRequestSchema, NivelSchema } from "@modules/niveis/infra/swagger/nivel.schema";
+import { CreateNivelRequestSchema, NivelSchema, UpdateNivelRequestSchema } from "@modules/niveis/infra/swagger/nivel.schema";
 
 const swaggerOptions = {
   swaggerDefinition: {
@@ -20,6 +20,7 @@ const swaggerOptions = {
     components: {
       schemas: {
         CreateNivelRequestSchema,
+        UpdateNivelRequestSchema,
         NivelSchema,
       }
     }

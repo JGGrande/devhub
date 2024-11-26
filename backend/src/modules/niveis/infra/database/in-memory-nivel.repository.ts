@@ -23,4 +23,18 @@ export class InMemoryNivelRepository implements INivelRepository {
   public async findAll(): Promise<Nivel[]> {
     return this.niveis;
   }
+
+  public async findById(id: number): Promise<Nivel | null> {
+    const nivel = this.niveis.find(nivel => nivel.id === id);
+
+    return nivel || null;
+  }
+
+  public async update({ id, nivel }: Nivel): Promise<Nivel> {
+    const nivelIndex = this.niveis.findIndex(nivel => nivel.id === id);
+
+    this.niveis[nivelIndex].nivel = nivel;
+
+    return this.niveis[nivelIndex];
+  }
 }
