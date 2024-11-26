@@ -1,0 +1,31 @@
+services:
+  nodejs:
+    build: .
+    restart: on-failure
+    depends_on:
+      - postgres
+    volumes:
+      - .:/home/root/app
+    ports:
+      - 3000:3000
+    env_file:
+      - .env
+    networks:
+      - backbone
+
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345678
+    ports:
+      - 5432:5432
+    volumes:
+      - ./docker/postgres:/var/lib/postgresql/data
+    networks:
+      - backbone
+
+networks:
+  backbone:
+    driver: bridge
