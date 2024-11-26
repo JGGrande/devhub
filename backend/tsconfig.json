@@ -18,6 +18,7 @@
     },
     "moduleResolution": "node",
     "resolveJsonModule": true,
+    "experimentalDecorators": true,
     "target": "ES2023", /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     "module": "commonjs", /* Specify what module code is generated. */
     "sourceMap": true, /* Create source map files for emitted JavaScript files. */

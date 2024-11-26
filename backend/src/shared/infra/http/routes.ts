@@ -1,9 +1,9 @@
-import { Router, Request, Response } from "express";
+import { Router } from "express";
+
+import { nivelRoutes } from "@modules/niveis/infra/http/routes/nivel.route";
 
 const Routes = Router();
 
-Routes.get("/", (request: Request, response: Response) => {
-  return response.json({ message: "Hello World" });
-});
+Routes.use("/niveis", nivelRoutes);
 
 export { Routes };
