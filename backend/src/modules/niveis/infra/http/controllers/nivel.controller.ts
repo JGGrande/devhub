@@ -21,7 +21,9 @@ export class NivelController {
 
     const nivelCreated = await createNivelUseCase.execute(nivel);
 
-    return response.json(NivelPresenter.toHttpResponse(nivelCreated));
+    return response
+      .status(201)
+      .json(NivelPresenter.toHttpResponse(nivelCreated));
   }
 
 }
