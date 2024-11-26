@@ -27,7 +27,7 @@ describe("FindAllNivelUseCase", () => {
 
     const result = await findAllNivelUseCase.execute({ page: 1, limit: 10 });
 
-    expect(result).toEqual(mockNiveis);
+    expect(result.data).toEqual(mockNiveis);
   });
 
   it("should throw an error when no niveis are found", async () => {
@@ -57,8 +57,6 @@ describe("FindAllNivelUseCase", () => {
 
     const resultPage1 = await findAllNivelUseCase.execute({ page: 1, limit: 2 });
     const resultPage2 = await findAllNivelUseCase.execute({ page: 2, limit: 2 });
-
-    console.debug({ resultPage2 });
 
     expect(resultPage1.data).toEqual([mockNiveis[0], mockNiveis[1]]);
     expect(resultPage1.meta).toEqual({

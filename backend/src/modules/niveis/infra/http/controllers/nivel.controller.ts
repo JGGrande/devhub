@@ -30,9 +30,35 @@ export class NivelController {
   }
 
   public async findAll(request: Request, response: Response): Promise<Response>{
+    const findAllQuerySchema = z.object({
+      page: z
+        .number({
+          coerce: true,
+          message: "Página deve ser um número."
+        })
+        .int({ message: "Página deve ser um número inteiro." })
+        .positive({  message: "Página deve ser um número positivo." })
+        .optional()
+        .default(1),
+      limit: z
+        .number({
+          coerce: true,
+          message: "Limite deve ser um número."
+        })
+        .int({ message: "Limit deve ser um número inteiro." })
+        .positive({  message: "Limite deve ser um número positivo." })
+        .optional()
+        .default(25)
+    });
+
+    const { page, limit } = findAllQuerySchema.parse(request.query);
+
     const findAllNivelUseCase = nivelContainer.resolve(FindAllNivelUseCase);
 
-    const niveis = await findAllNivelUseCase.execute();
+    const niveis = await findAllNivelUseCase.execute({
+      page,
+      limit
+    });
 
     return response.json(NivelPresenter.fromArrayToHttpResponse(niveis));
   }

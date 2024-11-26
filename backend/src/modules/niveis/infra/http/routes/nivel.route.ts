@@ -40,6 +40,21 @@ nivelRoutes.post("/", nivelController.create);
   *     description: Endpoint para listar todos os níveis no sistema.
   *     tags:
   *       - Nível
+  *     parameters:
+  *       - in: query
+  *         name: page
+  *         required: false
+  *         description: Página do conteúdo desejado
+  *         schema:
+  *           type: integer
+  *           example: 1
+  *       - in: query
+  *         name: limit
+  *         required: false
+  *         description: Limite de conteúdo por página
+  *         schema:
+  *           type: integer
+  *           example: 25
   *     responses:
   *       200:
   *         description: Lista de níveis retornada com sucesso.
