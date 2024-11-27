@@ -45,10 +45,10 @@ export class PrismaDesenvolvedorRepository implements IDesenvolvedorRepository {
       SELECT
         d.id,
         d.nome,
-        d.data_nascimento as "dataNascimento",
+        d.data_nascimento,
         d.hobby,
         d.sexo,
-        d.nivel_id as "nivelId",
+        d.nivel_id,
         n.id as nivel_id,
         n.nivel as nivel_nome
       FROM desenvolvedores d

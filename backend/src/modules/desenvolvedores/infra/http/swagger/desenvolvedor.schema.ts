@@ -80,6 +80,15 @@ export const FindAllDesenvolvedorResponseSchema = {
             enum: ['M', 'F', 'Outro'],
             example: 'M'
           },
+          data_nascimento: {
+            type: 'string',
+            format: 'date-time',
+            example: "2004-12-18T00:00:00.000Z"
+          },
+          idade: {
+            type: "integer",
+            example: 19
+          },
           hobby: {
             type: 'string',
             example: 'Programação'
