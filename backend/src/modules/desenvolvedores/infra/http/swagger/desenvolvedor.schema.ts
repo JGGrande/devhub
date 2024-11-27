@@ -58,3 +58,68 @@ export const DesenvolvedorSchema = {
     }
   }
 }
+
+export const FindAllDesenvolvedorResponseSchema = {
+  type: 'object',
+  properties: {
+    data: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          id: {
+            type: 'integer',
+            example: 1
+          },
+          nome: {
+            type: 'string',
+            example: 'João Grande'
+          },
+          sexo: {
+            type: 'string',
+            enum: ['M', 'F', 'Outro'],
+            example: 'M'
+          },
+          hobby: {
+            type: 'string',
+            example: 'Programação'
+          },
+          nivel: {
+            type: 'object',
+            properties: {
+              id: {
+                type: 'integer',
+                example: 37
+              },
+              nivel: {
+                type: 'string',
+                example: 'Pleno 1'
+              }
+            }
+          }
+        }
+      }
+    },
+    meta: {
+      type: 'object',
+      properties: {
+        total: {
+          type: 'integer',
+          example: 4
+        },
+        current_page: {
+          type: 'integer',
+          example: 1
+        },
+        per_page: {
+          type: 'integer',
+          example: 25
+        },
+        last_page: {
+          type: 'integer',
+          example: 1
+        }
+      }
+    }
+  }
+}

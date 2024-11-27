@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { desenvolvedorContainer } from "../../di/desenvolvedor.container";
 import { CreateDesenvolvedorUseCase } from "@modules/desenvolvedores/application/usecases/create-desenvolvedor.usecase";
 import { DesenvolvedorPresenter } from "../presenters/desenvolvedor.presenter";
+import { FindAllDesenvolvedorUseCase } from "@modules/desenvolvedores/application/usecases/find-all-desenvolvedor.usecase";
 
 export class DesenvolvedorController {
 
@@ -45,6 +46,47 @@ export class DesenvolvedorController {
     return response
       .status(201)
       .json(DesenvolvedorPresenter.toHttpResponse(desenvolvedor));
+  }
+
+  public async findAll(request: Request, response: Response): Promise<Response>{
+    const findAllQuerySchema = z.object({
+      page: z
+        .number({
+          coerce: true,
+          message: "Página deve ser um número."
+        })
+        .int({ message: "Página deve ser um número inteiro." })
+        .positive({  message: "Página deve ser um número positivo." })
+        .optional()
+        .default(1),
+      limit: z
+        .number({
+          coerce: true,
+          message: "Limite deve ser um número."
+        })
+        .int({ message: "Limit deve ser um número inteiro." })
+        .positive({  message: "Limite deve ser um número positivo." })
+        .optional()
+        .default(25),
+      searchTerm: z
+        .string({ message: "Termo de busca deve ser uma string." })
+        .trim()
+        .min(1, { message: "Termo de busca deve conter pelo menos 1 carácter." })
+        .max(255, { message: "Termo de busca não pode conter mais de 255 caracteres." })
+        .optional()
+    });
+
+    const { page, limit, searchTerm } = findAllQuerySchema.parse(request.query);
+
+    const findAllDesenvolvedorUseCase = desenvolvedorContainer.resolve(FindAllDesenvolvedorUseCase);
+
+    const desenvolvedores = await findAllDesenvolvedorUseCase.execute({
+      page,
+      limit,
+      searchTerm
+    });
+
+    return response.json(DesenvolvedorPresenter.fromArrayToHttpResponse(desenvolvedores));
   }
 
 }
