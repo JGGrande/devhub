@@ -116,6 +116,15 @@ export class PrismaDesenvolvedorRepository implements IDesenvolvedorRepository {
     return Boolean(desenvolvedorExits);
   }
 
+  public async exitsByNivelId(nivelId: number): Promise<boolean> {
+    const desenvolvedorExits = await this.prisma.desenvolvedores.findFirst({
+      where: { nivel_id: nivelId },
+      select: { id: true }
+    });
+
+    return Boolean(desenvolvedorExits);
+  }
+
   public async update({ id, dataNascimento, hobby, nivelId, nome, sexo }: Desenvolvedor): Promise<Desenvolvedor> {
     const desenvolvedorUpdated = await this.prisma.desenvolvedores.update({
       where: { id },

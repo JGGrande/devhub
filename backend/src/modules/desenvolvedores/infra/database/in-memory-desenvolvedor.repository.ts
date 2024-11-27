@@ -101,6 +101,12 @@ export class InMemoryDesenvolvedorRepository implements IDesenvolvedorRepository
     return Boolean(desenvolvedorExits);
   }
 
+  public async exitsByNivelId(nivelId: number): Promise<boolean> {
+    const desenvolvedorExits = this.desenvolvedores.find(dev => dev.nivelId === nivelId);
+
+    return Boolean(desenvolvedorExits)
+  }
+
   public async update({ id, dataNascimento, hobby, nivelId, nome, sexo }: Desenvolvedor): Promise<Desenvolvedor> {
     const desenvolvedorIndex = this.desenvolvedores.findIndex(dev => dev.id === id);
 
