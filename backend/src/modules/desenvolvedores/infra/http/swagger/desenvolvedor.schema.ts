@@ -3,11 +3,11 @@ export const CreateDesenvolvedorRequestSchema = {
   properties: {
     nome: {
       type: 'string',
-      example: 'João Grande 2'
+      example: 'João Grande'
     },
     nivel_id: {
       type: 'integer',
-      example: 37
+      example: 19
     },
     data_nascimento: {
       type: 'string',
@@ -131,4 +131,33 @@ export const FindAllDesenvolvedorResponseSchema = {
       }
     }
   }
+}
+
+export const UpdateDesenvolvedorRequestSchema = {
+  type: 'object',
+  properties: {
+    nome: {
+      type: 'string',
+      example: 'João Grande'
+    },
+    nivel_id: {
+      type: 'integer',
+      example: 19
+    },
+    data_nascimento: {
+      type: 'string',
+      format: 'date',
+      example: '2004-12-18'
+    },
+    sexo: {
+      type: 'string',
+      enum: ['M', 'F', 'Outro'],
+      example: 'M'
+    },
+    hobby: {
+      type: 'string',
+      example: 'Programação'
+    }
+  },
+  required: ['nome', 'nivel_id', 'data_nascimento', 'sexo', 'hobby']
 }

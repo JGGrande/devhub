@@ -7,4 +7,6 @@ export interface IDesenvolvedorRepository {
   create({}: CreateDesenvolvedorDto): Promise<Desenvolvedor>;
   findAllWithNivel({}: FindAllDesenvolvedorDto): Promise<DesenvolvedorWithNivelDto[]>;
   count(searchTerm?: string): Promise<number>;
+  findById(id: number): Promise<Desenvolvedor | null>;
+  update({}: Desenvolvedor): Promise<Desenvolvedor>;
 }

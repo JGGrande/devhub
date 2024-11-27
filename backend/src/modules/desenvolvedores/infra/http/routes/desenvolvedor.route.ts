@@ -77,4 +77,38 @@ desenvolvedorRoutes.post("/", desenvolvedorController.create);
   */
 desenvolvedorRoutes.get("/", desenvolvedorController.findAll);
 
+/**
+  * @openapi
+  * /desenvolvedores/{id}:
+  *   put:
+  *     summary: Alterar um desenvolvedor
+  *     description: Endpoint para alterar desenvolvedor no sistema.
+  *     tags:
+  *       - Desenvolvedor
+  *     parameters:
+  *       - in: path
+  *         name: id
+  *         required: true
+  *         schema:
+  *           type: integer
+  *     requestBody:
+  *       required: true
+  *       content:
+  *         application/json:
+  *           schema:
+  *             $ref: '#/components/schemas/UpdateDesenvolvedorRequestSchema'
+  *     responses:
+  *       200:
+  *         description: desenvolvedor atualizado retornado com sucesso.
+  *         content:
+  *           application/json:
+  *             schema:
+  *               $ref: '#/components/schemas/DesenvolvedorSchema'
+  *       404:
+  *         description: Desenvolvedor não encontrado.
+  *       500:
+  *         description: Erro interno do servidor.
+  */
+desenvolvedorRoutes.put("/:id", desenvolvedorController.update);
+
 export { desenvolvedorRoutes };

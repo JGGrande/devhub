@@ -88,4 +88,27 @@ export class InMemoryDesenvolvedorRepository implements IDesenvolvedorRepository
 
     return filteredDesenvolvedores.length;
   }
+
+  public async findById(id: number): Promise<Desenvolvedor | null> {
+    const desenvolvedor = this.desenvolvedores.find(dev => dev.id === id);
+
+    return desenvolvedor ?? null;
+  }
+
+  public async update({ id, dataNascimento, hobby, nivelId, nome, sexo }: Desenvolvedor): Promise<Desenvolvedor> {
+    const desenvolvedorIndex = this.desenvolvedores.findIndex(dev => dev.id === id);
+
+    const updatedDesenvolvedor = new Desenvolvedor({
+      id,
+      nome,
+      dataNascimento,
+      hobby,
+      nivelId,
+      sexo
+    });
+
+    this.desenvolvedores[desenvolvedorIndex] = updatedDesenvolvedor;
+
+    return updatedDesenvolvedor;
+  }
 }

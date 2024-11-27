@@ -84,8 +84,48 @@ export class PrismaDesenvolvedorRepository implements IDesenvolvedorRepository {
         ? Prisma.sql`WHERE unaccent("nome") ILIKE unaccent('%' || ${searchTerm} || '%')`
         : Prisma.sql``
       };
-  `;
+    `;
 
     return Number(totalDesenvolvedores[0].count);
   }
+
+  public async findById(id: number): Promise<Desenvolvedor | null> {
+    const desenvolvedorData = await this.prisma.desenvolvedores.findUnique({
+      where: { id }
+    });
+
+    if(!desenvolvedorData){
+      return null;
+    }
+
+    const desenvolvedor = new Desenvolvedor({
+      ...desenvolvedorData,
+      nivelId: desenvolvedorData.nivel_id,
+      dataNascimento: desenvolvedorData.data_nascimento
+    });
+
+    return desenvolvedor;
+  }
+
+  public async update({ id, dataNascimento, hobby, nivelId, nome, sexo }: Desenvolvedor): Promise<Desenvolvedor> {
+    const desenvolvedorUpdated = await this.prisma.desenvolvedores.update({
+      where: { id },
+      data: {
+        nome,
+        hobby,
+        data_nascimento: dataNascimento,
+        sexo,
+        nivel_id: nivelId
+      }
+    });
+
+    const desenvolvedor = new Desenvolvedor({
+      ...desenvolvedorUpdated,
+      nivelId: desenvolvedorUpdated.nivel_id,
+      dataNascimento: desenvolvedorUpdated.data_nascimento
+    });
+
+    return desenvolvedor;
+  }
+
 }
