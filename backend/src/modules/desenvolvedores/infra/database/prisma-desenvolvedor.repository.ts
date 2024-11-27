@@ -107,6 +107,15 @@ export class PrismaDesenvolvedorRepository implements IDesenvolvedorRepository {
     return desenvolvedor;
   }
 
+  public async exitsById(id: number): Promise<boolean> {
+    const desenvolvedorExits = await this.prisma.desenvolvedores.findUnique({
+      where: { id },
+      select: { id: true }
+    });
+
+    return Boolean(desenvolvedorExits);
+  }
+
   public async update({ id, dataNascimento, hobby, nivelId, nome, sexo }: Desenvolvedor): Promise<Desenvolvedor> {
     const desenvolvedorUpdated = await this.prisma.desenvolvedores.update({
       where: { id },
@@ -126,6 +135,13 @@ export class PrismaDesenvolvedorRepository implements IDesenvolvedorRepository {
     });
 
     return desenvolvedor;
+  }
+
+  public async delete(id: number): Promise<void> {
+    await this.prisma.desenvolvedores.delete({
+      where: { id },
+      select: { id: true }
+    });
   }
 
 }

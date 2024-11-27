@@ -5,6 +5,7 @@ import { CreateDesenvolvedorUseCase } from "@modules/desenvolvedores/application
 import { DesenvolvedorPresenter } from "../presenters/desenvolvedor.presenter";
 import { FindAllDesenvolvedorUseCase } from "@modules/desenvolvedores/application/usecases/find-all-desenvolvedor.usecase";
 import { UpdateDesenvolvedorUseCase } from "@modules/desenvolvedores/application/usecases/update-desenvolvedor.usecase";
+import { DeleteDesenvolvedorUseCase } from "@modules/desenvolvedores/application/usecases/delete-desenvolvedor.usecase";
 
 export class DesenvolvedorController {
 
@@ -140,6 +141,26 @@ export class DesenvolvedorController {
     });
 
     return response.json(DesenvolvedorPresenter.toHttpResponse(desenvolvedorUpdated));
+  }
+
+  public async delete(request: Request, response: Response): Promise<Response> {
+    const deleteParamsSchema = z.object({
+      id: z
+        .number({
+          coerce: true,
+          message: "ID deve ser um número."
+        })
+        .int({ message: "ID deve ser um número inteiro." })
+        .positive({ message: "ID deve ser um número positivo." })
+    });
+
+    const { id } = deleteParamsSchema.parse(request.params);
+
+    const deleteDesenvolvedorUseCase = desenvolvedorContainer.resolve(DeleteDesenvolvedorUseCase);
+
+    await deleteDesenvolvedorUseCase.execute(id);
+
+    return response.sendStatus(204);
   }
 
 }

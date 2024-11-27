@@ -111,4 +111,28 @@ desenvolvedorRoutes.get("/", desenvolvedorController.findAll);
   */
 desenvolvedorRoutes.put("/:id", desenvolvedorController.update);
 
+/**
+  * @openapi
+  * /desenvolvedores/{id}:
+  *   delete:
+  *     summary: Deletar um desenvolvedor
+  *     description: Endpoint para deletar desenvolvedor no sistema.
+  *     tags:
+  *       - Desenvolvedor
+  *     parameters:
+  *       - in: path
+  *         name: id
+  *         required: true
+  *         schema:
+  *           type: integer
+  *     responses:
+  *       204:
+  *         description: Desenvolvedor deletado com sucesso.
+  *       404:
+  *         description: Desenvolvedor não encontrado.
+  *       500:
+  *         description: Erro interno do servidor.
+  */
+desenvolvedorRoutes.delete("/:id", desenvolvedorController.delete);
+
 export { desenvolvedorRoutes };

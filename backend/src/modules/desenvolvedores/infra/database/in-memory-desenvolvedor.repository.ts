@@ -95,6 +95,12 @@ export class InMemoryDesenvolvedorRepository implements IDesenvolvedorRepository
     return desenvolvedor ?? null;
   }
 
+  public async exitsById(id: number): Promise<boolean> {
+    const desenvolvedorExits = this.desenvolvedores.find(dev => dev.id === id);
+
+    return Boolean(desenvolvedorExits);
+  }
+
   public async update({ id, dataNascimento, hobby, nivelId, nome, sexo }: Desenvolvedor): Promise<Desenvolvedor> {
     const desenvolvedorIndex = this.desenvolvedores.findIndex(dev => dev.id === id);
 
@@ -110,5 +116,13 @@ export class InMemoryDesenvolvedorRepository implements IDesenvolvedorRepository
     this.desenvolvedores[desenvolvedorIndex] = updatedDesenvolvedor;
 
     return updatedDesenvolvedor;
+  }
+
+  public async delete(id: number): Promise<void> {
+    const desenvolvedorIndex = this.desenvolvedores.findIndex(nivel => nivel.id === id);
+
+    const numberOfElementsToDelete = 1;
+
+    this.desenvolvedores.splice(desenvolvedorIndex, numberOfElementsToDelete);
   }
 }

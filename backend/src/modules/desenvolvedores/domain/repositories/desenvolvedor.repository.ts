@@ -8,5 +8,7 @@ export interface IDesenvolvedorRepository {
   findAllWithNivel({}: FindAllDesenvolvedorDto): Promise<DesenvolvedorWithNivelDto[]>;
   count(searchTerm?: string): Promise<number>;
   findById(id: number): Promise<Desenvolvedor | null>;
+  exitsById(id: number): Promise<boolean>;
   update({}: Desenvolvedor): Promise<Desenvolvedor>;
+  delete(id: number): Promise<void>;
 }
