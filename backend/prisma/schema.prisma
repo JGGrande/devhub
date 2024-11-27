@@ -10,8 +10,21 @@ datasource db {
 }
 
 model niveis {
-  id    Int    @id @default(autoincrement())
-  nivel String @db.VarChar()
+  id              Int               @id @default(autoincrement())
+  nivel           String            @db.VarChar()
+  desenvolvedores desenvolvedores[]
 
   @@map("niveis")
+}
+
+model desenvolvedores {
+  id              Int      @id @default(autoincrement())
+  nivel_id        Int
+  nivel           niveis   @relation(fields: [nivel_id], references: [id])
+  nome            String   @db.VarChar()
+  sexo            String   @db.Char(1)
+  data_nascimento DateTime @db.Date()
+  hobby           String   @db.VarChar()
+
+  @@map("desenvolvedores")
 }
