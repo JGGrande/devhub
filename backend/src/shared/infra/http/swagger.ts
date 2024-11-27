@@ -1,7 +1,7 @@
 import { env } from "@shared/env";
 import swaggerJSDoc from "swagger-jsdoc";
 
-import { CreateNivelRequestSchema, NivelSchema, UpdateNivelRequestSchema } from "@modules/niveis/infra/swagger/nivel.schema";
+import { CreateNivelRequestSchema, FindAllNivelResponseSchema, NivelSchema, UpdateNivelRequestSchema } from "@modules/niveis/infra/http/swagger/nivel.schema";
 import { CreateDesenvolvedorRequestSchema, DesenvolvedorSchema, FindAllDesenvolvedorResponseSchema } from "@modules/desenvolvedores/infra/http/swagger/desenvolvedor.schema";
 
 const swaggerOptions = {
@@ -23,6 +23,7 @@ const swaggerOptions = {
         CreateNivelRequestSchema,
         UpdateNivelRequestSchema,
         NivelSchema,
+        FindAllNivelResponseSchema,
         CreateDesenvolvedorRequestSchema,
         DesenvolvedorSchema,
         FindAllDesenvolvedorResponseSchema

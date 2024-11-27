@@ -70,7 +70,7 @@ nivelRoutes.post("/", nivelController.create);
   *             schema:
   *               type: array
   *               items:
-  *                 $ref: '#/components/schemas/NivelSchema'
+  *                 $ref: '#/components/schemas/FindAllNivelResponseSchema'
   *       404:
   *         description: Nenhum nível cadastrado.
   *       500:
