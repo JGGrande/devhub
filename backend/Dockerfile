@@ -6,7 +6,7 @@ RUN apt-get install -y openssl
 
 WORKDIR /home/root/app
 
-COPY . .
+COPY ./backend .
 
 RUN npm install --force
 
