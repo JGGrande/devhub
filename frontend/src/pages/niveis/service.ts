@@ -18,6 +18,13 @@ class NivelService {
 
     return data
   }
+
+  public async create(nivel: string): Promise<Nivel>{
+    const { data } = await HttpClient.post('/niveis', { nivel });
+
+    return data;
+  }
+
 }
 
 export default new NivelService();
