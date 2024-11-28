@@ -50,10 +50,12 @@ export function VerticalSlideBar({ isCollapsed, setIsCollapsed }: VerticalSlideB
       bg="gray.800"
       color="white"
       h="100vh"
+      overflowY="auto"
       borderRightWidth="1px"
       w={isCollapsed ? "80px" : "308px"}
+      top="0"
+      left="0"
       transition="width 0.3s"
-      overflow="hidden"
     >
       <VStack align="stretch" p={4}>
         {options.map((option) => (
