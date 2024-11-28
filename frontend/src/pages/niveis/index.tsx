@@ -7,12 +7,15 @@ import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { FcPrevious, FcNext } from "react-icons/fc";
 import NivelService from "./service";
 import Loading from "./components/Loading";
+import { CreateNivelModal } from "./components/CreateNivelModal";
+import { Toaster } from "@/components/ui/toaster";
 
 function NivelPage() {
   const [niveis, setNiveis] = useState<Nivel[]>([]);
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showCreateNivelModal, setShowCreateNivelModal] = useState(false);
   const [meta, setMeta] = useState<PaginatedContent<Nivel>["meta"]>();
 
   const paginationInfo = useMemo(() => {
@@ -78,6 +81,15 @@ function NivelPage() {
     <Flex justify="center">
       <Box w={"40vw"} p={4}>
         <Loading visible={isLoading} />
+
+        <Toaster />
+
+        <CreateNivelModal
+          show={showCreateNivelModal}
+          closeModal={() => setShowCreateNivelModal(false)}
+          updateContentTable={fetchNiveis}
+        />
+
         <Flex justify="space-between" mb={4}>
           <Input
             placeholder="Buscar níveis..."
@@ -89,7 +101,7 @@ function NivelPage() {
           <Button
             variant="solid"
             padding={4}
-            onClick={() => alert("Adicionar novo nível")}
+            onClick={() => setShowCreateNivelModal(true)}
           >
             Adicionar
           </Button>
