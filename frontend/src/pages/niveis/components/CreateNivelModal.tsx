@@ -73,7 +73,7 @@ export const CreateNivelModal = ({ show, closeModal, updateContentTable }: Creat
       zIndex={10}
       justify="center"
       align="center"
-      // onClick={closeModal}
+      onClick={closeModal}
     >
       <Box
         bg="gray.800"
@@ -82,6 +82,7 @@ export const CreateNivelModal = ({ show, closeModal, updateContentTable }: Creat
         shadow="lg"
         w="500px"
         maxW="90%"
+        onClick={(e) => e.stopPropagation()}
       >
         <Text
           fontSize="2xl"
