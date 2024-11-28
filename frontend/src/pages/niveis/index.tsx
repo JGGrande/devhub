@@ -9,6 +9,7 @@ import NivelService from "./service";
 import Loading from "./components/Loading";
 import { CreateNivelModal } from "./components/CreateNivelModal";
 import { Toaster } from "@/components/ui/toaster";
+import { DeleteNivelModal } from "./components/DeleteNivelModal";
 
 function NivelPage() {
   const [niveis, setNiveis] = useState<Nivel[]>([]);
@@ -16,6 +17,8 @@ function NivelPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showCreateNivelModal, setShowCreateNivelModal] = useState(false);
+  const [showDeleteNivelModal, setShowDeleteNivelModal] = useState(false);
+  const [nivelIdSelected, setNivelIdSelected] = useState<number>();
   const [meta, setMeta] = useState<PaginatedContent<Nivel>["meta"]>();
 
   const paginationInfo = useMemo(() => {
@@ -77,6 +80,11 @@ function NivelPage() {
     fetchNiveis();
   }, [page]);
 
+  const handleClickDeleteNivel = useCallback((nivelId: number) => {
+    setNivelIdSelected(nivelId);
+    setShowDeleteNivelModal(true);
+  }, []);
+
   return (
     <Flex justify="center">
       <Box w={"40vw"} p={4}>
@@ -88,6 +96,13 @@ function NivelPage() {
           show={showCreateNivelModal}
           closeModal={() => setShowCreateNivelModal(false)}
           updateContentTable={fetchNiveis}
+        />
+
+        <DeleteNivelModal
+          show={showDeleteNivelModal}
+          closeModal={() => setShowDeleteNivelModal(false)}
+          updateContentTable={fetchNiveis}
+          nivelId={nivelIdSelected!}
         />
 
         <Flex justify="space-between" mb={4}>
@@ -146,7 +161,7 @@ function NivelPage() {
                     </IconButton>
                     <IconButton
                       aria-label="Excluir"
-                      onClick={() => alert(`Excluir nível ${nivel.id}`)}
+                      onClick={() => handleClickDeleteNivel(nivel.id)}
                       variant="surface"
                       size="sm"
                     >

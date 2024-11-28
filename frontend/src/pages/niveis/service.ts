@@ -25,6 +25,10 @@ class NivelService {
     return data;
   }
 
+  public async delete(id: number){
+    await HttpClient.delete(`/niveis/${id}`);
+  }
+
 }
 
 export default new NivelService();
