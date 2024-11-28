@@ -1,15 +1,16 @@
 import { PaginatedContent } from "@/@types/pagination";
 import { Button } from "@/components/ui/button";
+import { Toaster } from "@/components/ui/toaster";
 import { Nivel } from "@/models/niveis";
 import { Box, Flex, IconButton, Input, Table } from "@chakra-ui/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
-import { FcPrevious, FcNext } from "react-icons/fc";
-import NivelService from "./service";
-import Loading from "./components/Loading";
+import { FcNext, FcPrevious } from "react-icons/fc";
 import { CreateNivelModal } from "./components/CreateNivelModal";
-import { Toaster } from "@/components/ui/toaster";
 import { DeleteNivelModal } from "./components/DeleteNivelModal";
+import Loading from "./components/Loading";
+import { UpdateNivelModal } from "./components/UpdateNivelModal";
+import NivelService from "./service";
 
 function NivelPage() {
   const [niveis, setNiveis] = useState<Nivel[]>([]);
@@ -18,7 +19,9 @@ function NivelPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [showCreateNivelModal, setShowCreateNivelModal] = useState(false);
   const [showDeleteNivelModal, setShowDeleteNivelModal] = useState(false);
-  const [nivelIdSelected, setNivelIdSelected] = useState<number>();
+  const [nivelIdSelectedToDelete, setNivelIdSelectedToDelete] = useState<number>();
+  const [showUpdateNivelModal, setShowUpdateNivelModal] = useState(false);
+  const [nivelSelectedToUpdate, setNivelSelectedToUpdate] = useState<Nivel>();
   const [meta, setMeta] = useState<PaginatedContent<Nivel>["meta"]>();
 
   const paginationInfo = useMemo(() => {
@@ -80,8 +83,13 @@ function NivelPage() {
     fetchNiveis();
   }, [page]);
 
+  const handleClickUpdateNivel = useCallback((nivel: Nivel) => {
+    setNivelSelectedToUpdate(nivel);
+    setShowUpdateNivelModal(true);
+  }, []);
+
   const handleClickDeleteNivel = useCallback((nivelId: number) => {
-    setNivelIdSelected(nivelId);
+    setNivelIdSelectedToDelete(nivelId);
     setShowDeleteNivelModal(true);
   }, []);
 
@@ -98,11 +106,18 @@ function NivelPage() {
           updateContentTable={fetchNiveis}
         />
 
+        <UpdateNivelModal
+          show={showUpdateNivelModal}
+          closeModal={() => setShowUpdateNivelModal(false)}
+          updateContentTable={fetchNiveis}
+          nivel={nivelSelectedToUpdate!}
+        />
+
         <DeleteNivelModal
           show={showDeleteNivelModal}
           closeModal={() => setShowDeleteNivelModal(false)}
           updateContentTable={fetchNiveis}
-          nivelId={nivelIdSelected!}
+          nivelId={nivelIdSelectedToDelete!}
         />
 
         <Flex justify="space-between" mb={4}>
@@ -153,7 +168,7 @@ function NivelPage() {
                   <Flex gap={3} justifyContent="flex-end">
                     <IconButton
                       aria-label="Editar"
-                      onClick={() => alert(`Editar nível ${nivel.id}`)}
+                      onClick={() => handleClickUpdateNivel(nivel)}
                       variant="solid"
                       size="sm"
                     >
