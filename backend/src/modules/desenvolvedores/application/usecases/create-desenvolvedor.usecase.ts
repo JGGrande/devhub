@@ -28,6 +28,11 @@ export class CreateDesenvolvedorUseCase {
       throw new AppError("Nível não encontrado", 404);
     }
 
+    const age = this.differenceInYears(new Date(), dataNascimento);
+    if (age < 16) {
+      throw new AppError("Desenvolvedor deve ter 16 anos ou mais", 400);
+    }
+
     const desenvolvedor = await this.desenvolvedorRepository.create({
       nome,
       dataNascimento,
@@ -37,5 +42,10 @@ export class CreateDesenvolvedorUseCase {
     });
 
     return desenvolvedor;
+  }
+
+  private differenceInYears(date1: Date, date2: Date): number {
+    const diff = Math.abs(date1.getTime() - date2.getTime());
+    return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
   }
 }

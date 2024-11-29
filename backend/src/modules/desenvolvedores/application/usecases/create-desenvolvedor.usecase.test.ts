@@ -74,4 +74,27 @@ describe('CreateDesenvolvedorUseCase', () => {
       expect(error).toHaveProperty('statusCode', 404);
     }
   });
+
+  it('should throw an error if desenvolvedor age is letter than 16 year', async () => {
+    const { id: nivelId } = await nivelRepository.create({ nivel: "Pleno 1" });
+
+    const createDesenvolvedorUseCase = new CreateDesenvolvedorUseCase(
+      desenvolvedorRepository,
+      nivelRepository
+    );
+
+    try{
+      await createDesenvolvedorUseCase.execute({
+        nome: 'John Doe',
+        dataNascimento: new Date('2023-01-01'),
+        hobby: 'Coding',
+        nivelId: nivelId,
+        sexo: 'M'
+      });
+    }catch(error){
+      expect(error).toBeInstanceOf(AppError);
+      expect(error).toHaveProperty('statusCode', 400);
+    }
+
+  })
 });
