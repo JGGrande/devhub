@@ -10,6 +10,7 @@ import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { FcNext, FcPrevious } from "react-icons/fc";
 import { BsGenderFemale, BsGenderMale } from "react-icons/bs";
 import { TbGenderGenderless } from "react-icons/tb";
+import { CreateDesenvolvedorModal } from "./components/CreateDesenvolvedorModal";
 
 
 function DesenvolvedorPage(){
@@ -108,6 +109,12 @@ function DesenvolvedorPage(){
         <Loading visible={isLoading} />
 
         <Toaster />
+
+        <CreateDesenvolvedorModal
+          show={showCreateDesenvolvedorModal}
+          closeModal={() => setShowCreateDesenvolvedorModal(false)}
+          updateContentTable={fetchDesenvolvedores}
+        />
 
         <Flex justify="space-between" mb={4}>
           <Input

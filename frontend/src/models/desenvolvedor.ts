@@ -23,3 +23,11 @@ export type DesenolvedorResponse = {
   idade: number;
   hobby: string;
 }
+
+export type DesenvolvedorCreate = {
+  nivelId: number;
+  nome: string;
+  sexo: string;
+  dataNascimento: Date;
+  hobby: string;
+}

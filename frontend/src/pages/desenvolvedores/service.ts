@@ -1,8 +1,15 @@
 import { PaginatedContent } from "@/@types/pagination";
-import { DesenolvedorResponse, Desenvolvedor } from "@/models/desenvolvedor";
+import { DesenolvedorResponse, Desenvolvedor, DesenvolvedorCreate } from "@/models/desenvolvedor";
+import { Nivel } from "@/models/niveis";
 import HttpClient from "@/services/http.service";
 
 class DesenvolvedorService {
+
+  public async findAllNiveis(): Promise<PaginatedContent<Nivel>> {
+    const { data } = await HttpClient.get('/niveis?limit=999');
+
+    return data;
+  }
 
   public async findAll(page: number, searchTerm?: string): Promise<PaginatedContent<Desenvolvedor>> {
     const params = {
@@ -23,6 +30,17 @@ class DesenvolvedorService {
       data: desenolvedoresMapped,
     };
   }
+
+  public async create(desenvolvedor: DesenvolvedorCreate): Promise<void> {
+    const desenvolvedorMapped = {
+      ...desenvolvedor,
+      nivel_id: desenvolvedor.nivelId,
+      data_nascimento: desenvolvedor.dataNascimento.toISOString().split("T")[0],
+    }
+
+    await HttpClient.post("/desenvolvedores", desenvolvedorMapped);
+  }
+
 }
 
 export default new DesenvolvedorService();
