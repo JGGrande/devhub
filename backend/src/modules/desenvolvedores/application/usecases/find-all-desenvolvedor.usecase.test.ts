@@ -7,6 +7,7 @@ import { desenvolvedorTestContainer } from "@modules/desenvolvedores/infra/di/de
 import { Desenvolvedor } from "@modules/desenvolvedores/domain/entities/desenvolvedor.entity";
 import { InMemoryDesenvolvedorRepository } from "@modules/desenvolvedores/infra/database/in-memory-desenvolvedor.repository";
 import AppError from "@shared/errors/AppError";
+import { DesenvolvedorKeysToOrder } from "../dtos/find-all-desenvolvedor.dto";
 
 describe("FindAllDesenvolvedorUseCase", () => {
   let findAllDesenvolvedorUseCase: FindAllDesenvolvedorUseCase;
@@ -55,7 +56,12 @@ describe("FindAllDesenvolvedorUseCase", () => {
       desenvolvedorRepository.create(desenvolvedor);
     });
 
-    const result = await findAllDesenvolvedorUseCase.execute({ page: 1, limit: 10 });
+    const result = await findAllDesenvolvedorUseCase.execute({
+      page: 1,
+      limit: 10,
+      orderKey: 'id',
+      orderValue: 'ASC'
+    });
 
     const expectedDesenvolvedoresResult = [
       {
@@ -90,7 +96,12 @@ describe("FindAllDesenvolvedorUseCase", () => {
 
   it("should throw an error when no desenvolvedores are found", async () => {
     try {
-      await findAllDesenvolvedorUseCase.execute({ page: 1, limit: 10 });
+      await findAllDesenvolvedorUseCase.execute({
+        page: 1,
+        limit: 10,
+        orderKey: 'id',
+        orderValue: 'ASC'
+      });
 
     } catch (error) {
       expect(error).toBeInstanceOf(AppError);
@@ -151,8 +162,18 @@ describe("FindAllDesenvolvedorUseCase", () => {
       desenvolvedorRepository.create(desenvolvedor);
     });
 
-    const resultPage1 = await findAllDesenvolvedorUseCase.execute({ page: 1, limit: 2 });
-    const resultPage2 = await findAllDesenvolvedorUseCase.execute({ page: 2, limit: 2 });
+    const resultPage1 = await findAllDesenvolvedorUseCase.execute({
+      page: 1,
+      limit: 2,
+      orderKey: 'id',
+      orderValue: 'ASC'
+    });
+    const resultPage2 = await findAllDesenvolvedorUseCase.execute({
+      page: 2,
+      limit: 2,
+      orderKey: 'id',
+      orderValue: 'ASC'
+    });
 
     const expectedDesenvolvedoresResult = [
       {
@@ -276,7 +297,9 @@ describe("FindAllDesenvolvedorUseCase", () => {
     const result = await findAllDesenvolvedorUseCase.execute({
       page: 1,
       limit: 10,
-      searchTerm
+      searchTerm,
+      orderKey: 'id',
+      orderValue: 'ASC'
     });
 
     const expectedDesenvolvedoresResult = [

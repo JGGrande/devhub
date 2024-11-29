@@ -35,7 +35,7 @@ export class InMemoryDesenvolvedorRepository implements IDesenvolvedorRepository
     return desenvolvedor;
   }
 
-  public async findAllWithNivel({ skip, take, searchTerm }: FindAllDesenvolvedorDto): Promise<DesenvolvedorWithNivelDto[]> {
+  public async findAllWithNivel({ skip, take, searchTerm, orderKey, orderValue }: FindAllDesenvolvedorDto): Promise<DesenvolvedorWithNivelDto[]> {
     let filteredDesenvolvedores: Desenvolvedor[] | DesenvolvedorWithNivelDto[] = this.desenvolvedores;
 
     if (searchTerm) {

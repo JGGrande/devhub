@@ -75,17 +75,27 @@ export class DesenvolvedorController {
         .trim()
         .min(1, { message: "Termo de busca deve conter pelo menos 1 carácter." })
         .max(255, { message: "Termo de busca não pode conter mais de 255 caracteres." })
+        .optional(),
+      orderKey: z
+        .enum(["id", "nome", "sexo", "data_nascimento", "hobby", "nivel_nome"])
         .optional()
+        .default("id"),
+      orderValue: z
+        .enum(["ASC", "DESC"])
+        .optional()
+        .default("ASC")
     });
 
-    const { page, limit, searchTerm } = findAllQuerySchema.parse(request.query);
+    const { page, limit, searchTerm, orderKey, orderValue } = findAllQuerySchema.parse(request.query);
 
     const findAllDesenvolvedorUseCase = desenvolvedorContainer.resolve(FindAllDesenvolvedorUseCase);
 
     const desenvolvedores = await findAllDesenvolvedorUseCase.execute({
       page,
       limit,
-      searchTerm
+      searchTerm,
+      orderKey,
+      orderValue
     });
 
     return response.json(DesenvolvedorPresenter.fromArrayToHttpResponse(desenvolvedores));

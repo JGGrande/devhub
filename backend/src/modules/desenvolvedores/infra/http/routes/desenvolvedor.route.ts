@@ -61,6 +61,22 @@ desenvolvedorRoutes.post("/", desenvolvedorController.create);
   *         description: Termo de busca
   *         schema:
   *           type: string
+  *       - in: query
+  *         name: orderKey
+  *         required: false
+  *         description: Chave de ordenação
+  *         schema:
+  *           type: string
+  *           enum: [id, nome, sexo, data_nascimento, hobby, nivel_nome]
+  *           example: id
+  *       - in: query
+  *         name: orderValue
+  *         required: false
+  *         description: Valor de ordenação
+  *         schema:
+  *           type: string
+  *           enum: [ASC, DESC]
+  *           example: ASC
   *     responses:
   *       200:
   *         description: Lista de desenvolvedores retornada com sucesso.

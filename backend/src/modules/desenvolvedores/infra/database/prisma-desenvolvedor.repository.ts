@@ -40,7 +40,9 @@ export class PrismaDesenvolvedorRepository implements IDesenvolvedorRepository {
     return desenvolvedor;
   }
 
-  public async findAllWithNivel({ take, skip, searchTerm }: FindAllDesenvolvedorDto): Promise<DesenvolvedorWithNivelDto[]> {
+  public async findAllWithNivel({ take, skip, searchTerm, orderKey, orderValue }: FindAllDesenvolvedorDto): Promise<DesenvolvedorWithNivelDto[]> {
+    console.debug({  take, skip, searchTerm, orderKey, orderValue });
+
     const desenvolvedores = await this.prisma.$queryRaw<PrimsDesenvolvedorWithNivel[]>`
       SELECT
         d.id,
@@ -55,8 +57,9 @@ export class PrismaDesenvolvedorRepository implements IDesenvolvedorRepository {
       JOIN niveis n ON d.nivel_id = n.id
       ${searchTerm
         ? Prisma.sql`WHERE unaccent("nome") ILIKE unaccent('%' || ${searchTerm} || '%')`
-        : Prisma.sql``
+        : Prisma.empty
       }
+      ORDER BY ${Prisma.raw(orderKey)} ${Prisma.raw(orderValue)}
       OFFSET ${skip}
       LIMIT ${take};
     `;
@@ -82,7 +85,7 @@ export class PrismaDesenvolvedorRepository implements IDesenvolvedorRepository {
       FROM desenvolvedores
       ${searchTerm
         ? Prisma.sql`WHERE unaccent("nome") ILIKE unaccent('%' || ${searchTerm} || '%')`
-        : Prisma.sql``
+        : Prisma.empty
       };
     `;
 
