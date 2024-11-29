@@ -14,6 +14,10 @@ const swaggerOptions = {
     },
     servers: [
       {
+        url: `https://devhub-api.infra.bytework.app.br/api`,
+        description: "Servidor stage"
+      },
+      {
         url: `http://localhost:${env.SERVER_PORT}/api`,
         description: 'Servidor local',
       }
