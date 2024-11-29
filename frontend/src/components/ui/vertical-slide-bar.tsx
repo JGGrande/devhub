@@ -56,6 +56,7 @@ export function VerticalSlideBar({ isCollapsed, setIsCollapsed }: VerticalSlideB
       top="0"
       left="0"
       transition="width 0.3s"
+      position="fixed"
     >
       <VStack align="stretch" p={4}>
         {options.map((option) => (

@@ -16,7 +16,7 @@ function App() {
             setIsCollapsed={setIsCollapsed}
           />
 
-          <Box w="full" p={4}>
+          <Box ml={isCollapsed ? "70px" : "10%" } w="full" p={4}>
             <AppRoutes />
           </Box>
         </Flex>
