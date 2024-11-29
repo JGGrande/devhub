@@ -28,11 +28,12 @@ Acesso o swagger das rotas: [https://devhub-api.infra.bytework.app.br/api-docs](
 
 1. Certifique-se de que o Docker está instalado e rodando em sua máquina.
 2. Navegue até a pasta `backend`, duplique o arquivo `.env.example` e renomeie para `.env`.
-3. Acesse a pasta `frontend`, clone o arquivo `.env.example` e renomeie para `.env`.
+3. Acesse a pasta `frontend`, duplique o arquivo `.env.example` e renomeie para `.env`.
 4. Na raiz do projeto, execute o comando:
 
    ```bash
    docker compose up
+5. Pronto! Agora a aplicação está disponível em [http://localhost](http://localhost)
 
 ## Executando os Testes Unitários
 
