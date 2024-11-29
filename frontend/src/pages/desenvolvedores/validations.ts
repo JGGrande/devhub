@@ -29,6 +29,13 @@ export const desenvolvedorIsValidToSave = (desenvolvedor: DesenvolvedorCreate) =
     errors.dataNascimento = "Data de nascimento é obrigatória";
   }
 
+  const minYearsOld = 16;
+  const age = differenceInYears(new Date(), desenvolvedor.dataNascimento);
+
+  if (age < minYearsOld) {
+    errors.dataNascimento = `Desenvolvedor deve ter no mínimo ${minYearsOld} anos`;
+  }
+
   if (!desenvolvedor.hobby.trim()) {
     errors.hobby = "Hobby é obrigatório";
   }
@@ -43,4 +50,9 @@ export const desenvolvedorIsValidToSave = (desenvolvedor: DesenvolvedorCreate) =
     valid: !haveSomeError,
     errors,
   }
+}
+
+function differenceInYears(date1: Date, date2: Date) {
+  const diff = Math.abs(date1.getTime() - date2.getTime());
+  return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
 }
