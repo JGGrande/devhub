@@ -2,7 +2,7 @@ import { PaginatedContent } from "@/@types/pagination";
 import { Desenvolvedor } from "@/models/desenvolvedor";
 import { useCallback, useEffect, useMemo, useState, JSX } from "react";
 import DesenvolvedorService from "./service";
-import { Badge, Box, Flex, IconButton, Input, Table } from "@chakra-ui/react";
+import { Box, Flex, IconButton, Input, Table } from "@chakra-ui/react";
 import Loading from "./components/Loading";
 import { Toaster } from "@/components/ui/toaster";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,7 @@ import { FcNext, FcPrevious } from "react-icons/fc";
 import { BsGenderFemale, BsGenderMale } from "react-icons/bs";
 import { TbGenderGenderless } from "react-icons/tb";
 import { CreateDesenvolvedorModal } from "./components/CreateDesenvolvedorModal";
+import { DeleteDesenvolvedorModal } from "./components/DeleteDesenvolvedorModal";
 
 
 function DesenvolvedorPage(){
@@ -113,6 +114,13 @@ function DesenvolvedorPage(){
         <CreateDesenvolvedorModal
           show={showCreateDesenvolvedorModal}
           closeModal={() => setShowCreateDesenvolvedorModal(false)}
+          updateContentTable={fetchDesenvolvedores}
+        />
+
+        <DeleteDesenvolvedorModal
+          show={showDeleteDesenvolvedorModal}
+          closeModal={() => setShowDeleteDesenvolvedorModal(false)}
+          desenvolvedorId={desenvolvedorIdSelectedToDelete!}
           updateContentTable={fetchDesenvolvedores}
         />
 

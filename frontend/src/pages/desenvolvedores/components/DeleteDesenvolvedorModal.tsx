@@ -3,16 +3,21 @@ import { toaster } from "@/components/ui/toaster";
 import { Box, Flex, Spinner, Text } from "@chakra-ui/react";
 import { AxiosError } from "axios";
 import { useCallback, useState } from "react";
-import NivelService from "../service";
+import DesenvolvedorService from "../service";
 
-type DeleteNivelModalProps = {
+type DeleteDesenvolvedorModalProps = {
   show: boolean;
   closeModal: () => void;
   updateContentTable: () => Promise<void>;
-  nivelId: number;
+  desenvolvedorId: number;
 };
 
-export const DeleteNivelModal = ({ show, closeModal, updateContentTable, nivelId }: DeleteNivelModalProps) => {
+export const DeleteDesenvolvedorModal = ({
+  show,
+  closeModal,
+  updateContentTable,
+  desenvolvedorId,
+}: DeleteDesenvolvedorModalProps) => {
   if (!show) {
     return null;
   }
@@ -23,11 +28,11 @@ export const DeleteNivelModal = ({ show, closeModal, updateContentTable, nivelId
     setLoading(true);
 
     try {
-      await NivelService.delete(nivelId);
+      await DesenvolvedorService.delete(desenvolvedorId);
 
       toaster.create({
-        title: "Nível deletado com sucesso",
-        description: "O nível foi deletado com sucesso.",
+        title: "Desenvolvedor deletado com sucesso",
+        description: "O desenvolvedor foi deletado com sucesso.",
         type: "success",
         duration: 5000,
       });
@@ -36,20 +41,22 @@ export const DeleteNivelModal = ({ show, closeModal, updateContentTable, nivelId
 
       closeModal();
     } catch (error) {
-      let errorMessage = "Ocorreu um erro ao deletar o nível, tente novamente.";
+      let errorMessage = "Ocorreu um erro ao deletar desenvolvedor, tente novamente.";
 
       if (error instanceof AxiosError) {
-        if(error.response?.status === 404 || error.response?.status === 409) {
+        if (error.response?.status === 404 || error.response?.status === 409) {
           errorMessage = error.response?.data.message;
         }
 
-        if(error.response?.status === 400) {
-          errorMessage = error.response?.data.error.map((e: any) => e.message).join(', ') || errorMessage;
+        if (error.response?.status === 400) {
+          errorMessage =
+            error.response?.data.error.map((e: any) => e.message).join(", ") ||
+            errorMessage;
         }
       }
 
       toaster.create({
-        title: "Erro ao deletar nível",
+        title: "Erro ao deletar desenvolvedor",
         description: errorMessage,
         type: "error",
         duration: 5000,
@@ -82,22 +89,22 @@ export const DeleteNivelModal = ({ show, closeModal, updateContentTable, nivelId
         maxW="90%"
         onClick={(e) => e.stopPropagation()}
       >
-        <Text
-          fontSize="2xl"
-          mb={4}
-          fontWeight="bold"
-        >
-          Deseja deletar nível?
+        <Text fontSize="2xl" mb={4} fontWeight="bold">
+          Deseja deletar desenvolvedor?
         </Text>
         <Flex justify="flex-end" gap={3}>
           <Button p={2} variant="ghost" onClick={closeModal}>
             Cancelar
           </Button>
           <Button p={2} bgColor="red" onClick={handleDelete}>
-            {loading ? (<Spinner size="sm" />) : (<Text color="white">Deletar</Text>)}
+            {loading ? (
+              <Spinner size="sm" />
+            ) : (
+              <Text color="white">Deletar</Text>
+            )}
           </Button>
         </Flex>
       </Box>
     </Flex>
   );
-}
+};

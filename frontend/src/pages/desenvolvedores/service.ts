@@ -41,6 +41,10 @@ class DesenvolvedorService {
     await HttpClient.post("/desenvolvedores", desenvolvedorMapped);
   }
 
+  public async delete(id: number): Promise<void> {
+    await HttpClient.delete(`/desenvolvedores/${id}`);
+  }
+
 }
 
 export default new DesenvolvedorService();
