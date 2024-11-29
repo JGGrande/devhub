@@ -21,7 +21,7 @@ export class InMemoryNivelRepository implements INivelRepository {
     return newNivel;
   }
 
-  public async findAll({ skip, take, searchTerm }: FindAllNivelDto): Promise<Nivel[]> {
+  public async findAll({ skip, take, searchTerm, orderKey, orderValue }: FindAllNivelDto): Promise<Nivel[]> {
     let filteredNiveis = this.niveis;
 
     if (searchTerm) {
@@ -35,6 +35,16 @@ export class InMemoryNivelRepository implements INivelRepository {
       filteredNiveis = filteredNiveis.filter(({ nivel }) =>
         normalizeString(nivel).includes(normalizedSearchTerm)
       );
+    }
+
+    if (orderKey && orderValue) {
+      filteredNiveis = filteredNiveis.sort((a, b) => {
+        if (orderValue === 'ASC') {
+          return a[orderKey] > b[orderKey] ? 1 : -1;
+        }
+
+        return a[orderKey] < b[orderKey] ? 1 : -1;
+      });
     }
 
     return filteredNiveis.slice(skip, skip + take);

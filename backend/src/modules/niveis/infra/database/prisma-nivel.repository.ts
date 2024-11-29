@@ -29,7 +29,7 @@ export class PrismaNivelRepository implements INivelRepository {
     return nivelInstance;
   }
 
-  public async findAll({ skip, take, searchTerm }: FindAllNivelDto): Promise<Nivel[]> {
+  public async findAll({ skip, take, searchTerm, orderKey, orderValue }: FindAllNivelDto): Promise<Nivel[]> {
     const niveis = await this.prisma.$queryRaw<PrismaNivel[]>`
       SELECT
         id,
@@ -38,10 +38,12 @@ export class PrismaNivelRepository implements INivelRepository {
       ${
         searchTerm
           ? Prisma.sql`WHERE unaccent("nivel") ILIKE unaccent('%' || ${searchTerm} || '%')`
-          : Prisma.sql``
+          : Prisma.empty
       }
+      ORDER BY ${Prisma.raw(orderKey)} ${Prisma.raw(orderValue)}
       OFFSET ${skip}
-      LIMIT ${take};
+      LIMIT ${take}
+      ;
     `;
 
     const niveisInstance = niveis.map(nivel => new Nivel(nivel));
@@ -66,7 +68,7 @@ export class PrismaNivelRepository implements INivelRepository {
   public async exitsById(id: number): Promise<boolean> {
     const nivelExits = await this.prisma.niveis.findUnique({
       where: { id },
-      select: { id: true }
+      select: { id: true },
     });
 
     return Boolean(nivelExits);
@@ -79,7 +81,7 @@ export class PrismaNivelRepository implements INivelRepository {
       ${
         searchTerm
           ? Prisma.sql`WHERE unaccent("nivel") ILIKE unaccent('%' || ${searchTerm} || '%')`
-          : Prisma.sql``
+          : Prisma.empty
       };
     `;
 

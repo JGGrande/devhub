@@ -25,7 +25,12 @@ describe("FindAllNivelUseCase", () => {
 
     const findAllNivelUseCase = new FindAllNivelUseCase(nivelRepository);
 
-    const result = await findAllNivelUseCase.execute({ page: 1, limit: 10 });
+    const result = await findAllNivelUseCase.execute({
+      page: 1,
+      limit: 10,
+      orderKey: 'id',
+      orderValue: 'ASC'
+    });
 
     expect(result.data).toEqual(mockNiveis);
   });
@@ -34,7 +39,12 @@ describe("FindAllNivelUseCase", () => {
     const findAllNivelUseCase = new FindAllNivelUseCase(nivelRepository);
 
     try {
-      await findAllNivelUseCase.execute({ page: 1, limit: 10 });
+      await findAllNivelUseCase.execute({
+        page: 1,
+        limit: 10,
+        orderKey: 'id',
+        orderValue: 'ASC'
+      });
     } catch (error) {
       expect(error).toBeInstanceOf(AppError);
       expect(error).toHaveProperty('statusCode', 404);
@@ -55,8 +65,19 @@ describe("FindAllNivelUseCase", () => {
 
     const findAllNivelUseCase = new FindAllNivelUseCase(nivelRepository);
 
-    const resultPage1 = await findAllNivelUseCase.execute({ page: 1, limit: 2 });
-    const resultPage2 = await findAllNivelUseCase.execute({ page: 2, limit: 2 });
+    const resultPage1 = await findAllNivelUseCase.execute({
+      page: 1,
+      limit: 2,
+      orderKey: 'id',
+      orderValue: 'ASC'
+    });
+
+    const resultPage2 = await findAllNivelUseCase.execute({
+      page: 2,
+      limit: 2,
+      orderKey: 'id',
+      orderValue: 'ASC'
+    });
 
     expect(resultPage1.data).toEqual([mockNiveis[0], mockNiveis[1]]);
     expect(resultPage1.meta).toEqual({
@@ -94,7 +115,9 @@ describe("FindAllNivelUseCase", () => {
     const result = await findAllNivelUseCase.execute({
       page: 1,
       limit: 10,
-      searchTerm
+      searchTerm,
+      orderKey: 'id',
+      orderValue: 'ASC'
     });
 
     expect(result.data).toEqual([mockNiveis[0], mockNiveis[1]]);
@@ -105,5 +128,77 @@ describe("FindAllNivelUseCase", () => {
       last_page: 1
     });
   });
+
+  it("should return níveis sorted by the given orderKey and orderValue", async () => {
+    const mockNiveis: Nivel[] = [
+      new Nivel({ id: 1, nivel: "Pleno 1" }),
+      new Nivel({ id: 2, nivel: "Junior 2" }),
+      new Nivel({ id: 3, nivel: "Junior 1" }),
+      new Nivel({ id: 4, nivel: "Pleno 2" }),
+    ];
+
+    mockNiveis.forEach(nivel => {
+      nivelRepository.create(nivel);
+    });
+
+    const findAllNivelUseCase = new FindAllNivelUseCase(nivelRepository);
+
+    const resultAsc = await findAllNivelUseCase.execute({
+      page: 1,
+      limit: 10,
+      orderKey: 'nivel',
+      orderValue: 'ASC'
+    });
+
+    expect(resultAsc.data).toEqual([
+      mockNiveis[2],
+      mockNiveis[1],
+      mockNiveis[0],
+      mockNiveis[3],
+    ]);
+
+    const resultDesc = await findAllNivelUseCase.execute({
+      page: 1,
+      limit: 10,
+      orderKey: 'nivel',
+      orderValue: 'DESC'
+    });
+
+    expect(resultDesc.data).toEqual([
+      mockNiveis[3],
+      mockNiveis[0],
+      mockNiveis[1],
+      mockNiveis[2],
+    ]);
+
+    const resultIdAsc = await findAllNivelUseCase.execute({
+      page: 1,
+      limit: 10,
+      orderKey: 'id',
+      orderValue: 'ASC'
+    });
+
+    expect(resultIdAsc.data).toEqual([
+      mockNiveis[0],
+      mockNiveis[1],
+      mockNiveis[2],
+      mockNiveis[3],
+    ]);
+
+    const resultIdDesc = await findAllNivelUseCase.execute({
+      page: 1,
+      limit: 10,
+      orderKey: 'id',
+      orderValue: 'DESC'
+    });
+
+    expect(resultIdDesc.data).toEqual([
+      mockNiveis[3],
+      mockNiveis[2],
+      mockNiveis[1],
+      mockNiveis[0],
+    ]);
+  });
+
 
 });

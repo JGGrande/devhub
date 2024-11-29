@@ -54,17 +54,27 @@ export class NivelController {
         .trim()
         .min(1, { message: "Termo de busca deve conter pelo menos 1 carácter." })
         .max(255, { message: "Termo de busca não pode conter mais de 255 caracteres." })
+        .optional(),
+      orderKey: z
+        .enum(["id", "nivel"], { message: "Chave de ordenação inválida." })
         .optional()
+        .default("id"),
+      orderValue: z
+        .enum(["ASC", "DESC"], { message: "Valor de ordenação inválido." })
+        .optional()
+        .default("ASC")
     });
 
-    const { page, limit, searchTerm } = findAllQuerySchema.parse(request.query);
+    const { page, limit, searchTerm, orderKey, orderValue } = findAllQuerySchema.parse(request.query);
 
     const findAllNivelUseCase = nivelContainer.resolve(FindAllNivelUseCase);
 
     const niveis = await findAllNivelUseCase.execute({
       page,
       limit,
-      searchTerm
+      searchTerm,
+      orderKey,
+      orderValue
     });
 
     return response.json(NivelPresenter.fromArrayToHttpResponse(niveis));

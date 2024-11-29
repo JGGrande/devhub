@@ -9,6 +9,8 @@ type FindAllNivelUseCaseProps = {
   page: number;
   limit: number;
   searchTerm?: string;
+  orderKey: keyof Nivel;
+  orderValue: 'ASC' | 'DESC';
 }
 
 @injectable()
@@ -18,14 +20,16 @@ export class FindAllNivelUseCase {
     private readonly nivelRepository: INivelRepository
   ){ }
 
-  public async execute({ page, limit, searchTerm }: FindAllNivelUseCaseProps): Promise<PaginatedContent<Nivel>>{
+  public async execute({ page, limit, searchTerm, orderKey, orderValue }: FindAllNivelUseCaseProps): Promise<PaginatedContent<Nivel>>{
     const skip = (page - 1) * limit;
 
     const [ niveis, totalNiveis ] = await Promise.all([
       this.nivelRepository.findAll({
         skip,
         take: limit,
-        searchTerm
+        searchTerm,
+        orderKey,
+        orderValue
       }),
       this.nivelRepository.count(searchTerm)
     ]);

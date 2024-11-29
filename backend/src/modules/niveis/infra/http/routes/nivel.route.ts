@@ -62,6 +62,22 @@ nivelRoutes.post("/", nivelController.create);
   *         schema:
   *           type: string
   *           example: junior
+  *       - in: query
+  *         name: orderKey
+  *         required: false
+  *         description: Chave de ordenação
+  *         schema:
+  *           type: string
+  *           enum: [id, nivel]
+  *           example: id
+  *       - in: query
+  *         name: orderValue
+  *         required: false
+  *         description: Valor de ordenação
+  *         schema:
+  *           type: string
+  *           enum: [ASC, DESC]
+  *           example: ASC
   *     responses:
   *       200:
   *         description: Lista de níveis retornada com sucesso.
