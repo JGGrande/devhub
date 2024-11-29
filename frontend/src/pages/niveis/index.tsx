@@ -156,7 +156,7 @@ function NivelPage() {
                 </Table.Cell>
               </Table.Row>
             )}
-            {niveis.map((nivel) => (
+            {niveis?.map((nivel) => (
               <Table.Row key={nivel.id}>
                 <Table.Cell p={3}><strong>{nivel.id}</strong>
                 </Table.Cell>
