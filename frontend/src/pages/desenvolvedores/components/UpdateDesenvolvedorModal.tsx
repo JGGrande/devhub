@@ -1,39 +1,42 @@
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import {
-  Box,
-  createListCollection,
-  Flex,
-  Input,
-  Spinner,
-  Text,
+    SelectContent,
+    SelectItem,
+    SelectLabel,
+    SelectRoot,
+    SelectTrigger,
+    SelectValueText,
+} from "@/components/ui/select";
+import { toaster } from "@/components/ui/toaster";
+import { Nivel } from "@/models/niveis";
+import {
+    Box,
+    createListCollection,
+    Flex,
+    Input,
+    Spinner,
+    Text,
 } from "@chakra-ui/react";
 import { AxiosError } from "axios";
 import { useCallback, useEffect, useState } from "react";
 import DesenvolvedorService from "../service";
-import { toaster } from "@/components/ui/toaster";
 import { desenvolvedorIsValidToSave } from "../validations";
-import {
-  SelectContent,
-  SelectItem,
-  SelectLabel,
-  SelectRoot,
-  SelectTrigger,
-  SelectValueText,
-} from "@/components/ui/select";
-import { Nivel } from "@/models/niveis";
+import { Desenvolvedor } from "@/models/desenvolvedor";
 
-type CreateDesenvolvedorModal = {
+type UpdateDesenvolvedorModalProps = {
   show: boolean;
   closeModal: () => void;
   updateContentTable: () => Promise<void>;
+  desenvolvedor: Desenvolvedor;
 };
 
-export const CreateDesenvolvedorModal = ({
+export const UpdateDesenvolvedorModal = ({
   show,
   closeModal,
   updateContentTable,
-}: CreateDesenvolvedorModal) => {
+  desenvolvedor,
+}: UpdateDesenvolvedorModalProps) => {
   if (!show) {
     return null;
   }
@@ -41,11 +44,11 @@ export const CreateDesenvolvedorModal = ({
   const [loading, setLoading] = useState(false);
   const [niveis, setNiveis] = useState<Nivel[]>([]);
 
-  const [nome, setNome] = useState("");
-  const [sexo, setSexo] = useState("M");
-  const [nivelId, setNivelId] = useState(0);
-  const [dataNascimento, setDataNascimento] = useState(new Date());
-  const [hobby, setHobby] = useState("");
+  const [nome, setNome] = useState(desenvolvedor.nome);
+  const [sexo, setSexo] = useState(desenvolvedor.sexo);
+  const [nivelId, setNivelId] = useState(desenvolvedor.nivel.id);
+  const [dataNascimento, setDataNascimento] = useState(desenvolvedor.dataNascimento);
+  const [hobby, setHobby] = useState(desenvolvedor.hobby);
 
   const [errors, setErrors] = useState({
     nome: "",
@@ -72,12 +75,10 @@ export const CreateDesenvolvedorModal = ({
 
   const fetchNiveis = useCallback(async () => {
     const { data } = await DesenvolvedorService.findAllNiveis();
-
-    setNivelId(data[0].id);
     setNiveis(data);
   }, []);
 
-  const handleCreate = useCallback(async () => {
+  const handleSave = useCallback(async () => {
     const { valid, errors: validationErrors } = desenvolvedorIsValidToSave({
       nome,
       dataNascimento,
@@ -94,7 +95,8 @@ export const CreateDesenvolvedorModal = ({
     setLoading(true);
 
     try {
-      await DesenvolvedorService.create({
+      await DesenvolvedorService.update({
+        id: desenvolvedor.id,
         nome,
         dataNascimento,
         hobby,
@@ -103,31 +105,18 @@ export const CreateDesenvolvedorModal = ({
       });
 
       toaster.create({
-        title: "Desenvolvedor criado com sucesso",
-        description: "O desenvolvedor foi criado com sucesso.",
+        title: "Desenvolvedor atualizado com sucesso",
+        description: "O desenvolvedor foi atualizado com sucesso.",
         type: "success",
         duration: 5000,
       });
 
       updateContentTable();
 
-      setNome("");
-      setSexo("M");
-      setHobby("");
-      setDataNascimento(new Date());
-      setNivelId(0);
-      setErrors({
-        nome: "",
-        sexo: "",
-        nivelId: "",
-        dataNascimento: "",
-        hobby: "",
-      });
-
       closeModal();
     } catch (error) {
       let errorMessage =
-        "Ocorreu um erro ao criar o desenvolvedor, tente novamente.";
+        "Ocorreu um erro ao atualizar o desenvolvedor, tente novamente.";
 
       if (error instanceof AxiosError) {
         errorMessage =
@@ -137,7 +126,7 @@ export const CreateDesenvolvedorModal = ({
       }
 
       toaster.create({
-        title: "Erro ao criar desenvolvedor",
+        title: "Erro ao atualizar desenvolvedor",
         description: errorMessage,
         type: "error",
         duration: 5000,
@@ -149,7 +138,7 @@ export const CreateDesenvolvedorModal = ({
 
   useEffect(() => {
     fetchNiveis();
-  }, []);
+  }, [fetchNiveis]);
 
   return (
     <Flex
@@ -175,7 +164,7 @@ export const CreateDesenvolvedorModal = ({
         onClick={(e) => e.stopPropagation()}
       >
         <Text fontSize="2xl" mb={4} fontWeight="bold">
-          Cadastrar desenvolvedor
+          Editar desenvolvedor
         </Text>
 
         <Box p={6} border="1px" borderColor="gray.300" borderRadius="md">
@@ -267,8 +256,8 @@ export const CreateDesenvolvedorModal = ({
           <Button p={2} variant="ghost" onClick={closeModal}>
             Cancelar
           </Button>
-          <Button p={2} colorScheme="blue" onClick={handleCreate}>
-            {loading ? <Spinner size="sm" /> : <>Cadastrar</>}
+          <Button p={2} colorScheme="blue" onClick={handleSave}>
+            {loading ? <Spinner size="sm" /> : <>Salvar</>}
           </Button>
         </Flex>
       </Box>

@@ -1,5 +1,5 @@
 import { PaginatedContent } from "@/@types/pagination";
-import { DesenolvedorResponse, Desenvolvedor, DesenvolvedorCreate } from "@/models/desenvolvedor";
+import { DesenolvedorResponse, Desenvolvedor, DesenvolvedorCreate, DesenvolvedorUpdate } from "@/models/desenvolvedor";
 import { Nivel } from "@/models/niveis";
 import HttpClient from "@/services/http.service";
 
@@ -22,7 +22,7 @@ class DesenvolvedorService {
 
     const desenolvedoresMapped = (data as PaginatedContent<DesenolvedorResponse>).data.map((desenvolvedor) => ({
       ...desenvolvedor,
-      dataNascimento: new Date(desenvolvedor.dataNascimento),
+      dataNascimento: new Date(desenvolvedor.data_nascimento),
     }));
 
     return {
@@ -39,6 +39,20 @@ class DesenvolvedorService {
     }
 
     await HttpClient.post("/desenvolvedores", desenvolvedorMapped);
+  }
+
+  public async update(desenvolvedor: DesenvolvedorUpdate){
+    const dataNascimentoWithoutTime = desenvolvedor.dataNascimento.toISOString().split('T')[0];
+
+    const desenvolvedorMapped = {
+      nome: desenvolvedor.nome,
+      nivel_id: desenvolvedor.nivelId,
+      data_nascimento: dataNascimentoWithoutTime,
+      hobby: desenvolvedor.hobby,
+      sexo: desenvolvedor.sexo
+    }
+
+    await HttpClient.put(`/desenvolvedores/${desenvolvedor.id}`, desenvolvedorMapped);
   }
 
   public async delete(id: number): Promise<void> {

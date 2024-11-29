@@ -19,12 +19,21 @@ export type DesenolvedorResponse = {
   }
   nome: string;
   sexo: string;
-  dataNascimento: string;
+  data_nascimento: string;
   idade: number;
   hobby: string;
 }
 
 export type DesenvolvedorCreate = {
+  nivelId: number;
+  nome: string;
+  sexo: string;
+  dataNascimento: Date;
+  hobby: string;
+}
+
+export type DesenvolvedorUpdate = {
+  id: number;
   nivelId: number;
   nome: string;
   sexo: string;

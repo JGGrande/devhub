@@ -12,6 +12,7 @@ import { BsGenderFemale, BsGenderMale } from "react-icons/bs";
 import { TbGenderGenderless } from "react-icons/tb";
 import { CreateDesenvolvedorModal } from "./components/CreateDesenvolvedorModal";
 import { DeleteDesenvolvedorModal } from "./components/DeleteDesenvolvedorModal";
+import { UpdateDesenvolvedorModal } from "./components/UpdateDesenvolvedorModal";
 
 
 function DesenvolvedorPage(){
@@ -115,6 +116,13 @@ function DesenvolvedorPage(){
           show={showCreateDesenvolvedorModal}
           closeModal={() => setShowCreateDesenvolvedorModal(false)}
           updateContentTable={fetchDesenvolvedores}
+        />
+
+        <UpdateDesenvolvedorModal
+          show={showUpdateDesenvolvedorModal}
+          closeModal={() => setShowUpdateDesenvolvedorModal(false)}
+          updateContentTable={fetchDesenvolvedores}
+          desenvolvedor={desenvolvedorSelectedToUpdate!}
         />
 
         <DeleteDesenvolvedorModal
