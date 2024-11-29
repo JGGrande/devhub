@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsup src --out-dir build",
-    "start": "npx prisma generate && npx prisma migrate deploy && node build/shared/infra/http/server.cjs",
+    "start": "npx prisma generate && npx prisma migrate deploy && npm run build && node build/shared/infra/http/server.cjs",
     "start:dev": "tsx watch src/shared/infra/http/server.ts",
     "test": "vitest run"
   },

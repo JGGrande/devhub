@@ -10,9 +10,7 @@ COPY ./backend .
 
 RUN npm install --force
 
-RUN if [ -d "dist" ]; then rm -r dist; fi
-
-RUN npm run build
+RUN if [ -d "build" ]; then rm -r build; fi
 
 CMD if [ "$NODE_ENV" = "stage" ] || [ "$NODE_ENV" = "production" ]; then \
   npm start ; \
