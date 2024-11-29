@@ -149,7 +149,7 @@ function NivelPage() {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {niveis.length === 0 && (
+            {niveis?.length === 0 && (
               <Table.Row>
                 <Table.Cell colSpan={3} p={3}>
                   Nenhum nível encontrado
