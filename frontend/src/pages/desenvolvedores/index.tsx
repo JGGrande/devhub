@@ -104,10 +104,10 @@ function DesenvolvedorPage() {
     setShowDeleteDesenvolvedorModal(true);
   }, []);
 
-  const handleSort = (key: DesenvolvedorKeysToOrder) => {
+  const handleSort = useCallback((key: DesenvolvedorKeysToOrder) => {
     setOrderKey(key);
     setOrderValue((prev) => (prev === "ASC" ? "DESC" : "ASC"));
-  };
+  }, []);
 
   return (
     <Flex justify="center">

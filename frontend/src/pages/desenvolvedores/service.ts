@@ -14,7 +14,7 @@ class DesenvolvedorService {
   }
 
   public async findAll(page: number, searchTerm?: string, orderKey?: DesenvolvedorKeysToOrder, orderValue?: "ASC" | "DESC"): Promise<PaginatedContent<Desenvolvedor>> {
-    const params: Record<string, string | DesenvolvedorKeysToOrder | 'ASC' | 'DESC'> = {
+    const params: Record<string, string> = {
       page: String(page),
       limit: String(15)
     }
@@ -34,8 +34,6 @@ class DesenvolvedorService {
       ...desenvolvedor,
       dataNascimento: new Date(desenvolvedor.data_nascimento),
     }));
-
-    console.log(desenolvedoresMapped);
 
     return {
       ...data,

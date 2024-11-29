@@ -41,8 +41,6 @@ export class PrismaDesenvolvedorRepository implements IDesenvolvedorRepository {
   }
 
   public async findAllWithNivel({ take, skip, searchTerm, orderKey, orderValue }: FindAllDesenvolvedorDto): Promise<DesenvolvedorWithNivelDto[]> {
-    console.debug({  take, skip, searchTerm, orderKey, orderValue });
-
     const desenvolvedores = await this.prisma.$queryRaw<PrimsDesenvolvedorWithNivel[]>`
       SELECT
         d.id,

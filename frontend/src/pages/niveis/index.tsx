@@ -4,7 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Nivel } from "@/models/niveis";
 import { Box, Flex, IconButton, Input, Table } from "@chakra-ui/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { FaEdit, FaTrashAlt } from "react-icons/fa";
+import { FaEdit, FaSortDown, FaSortUp, FaTrashAlt } from "react-icons/fa";
 import { FcNext, FcPrevious } from "react-icons/fc";
 import { CreateNivelModal } from "./components/CreateNivelModal";
 import { DeleteNivelModal } from "./components/DeleteNivelModal";
@@ -23,6 +23,9 @@ function NivelPage() {
   const [showUpdateNivelModal, setShowUpdateNivelModal] = useState(false);
   const [nivelSelectedToUpdate, setNivelSelectedToUpdate] = useState<Nivel>();
   const [meta, setMeta] = useState<PaginatedContent<Nivel>["meta"]>();
+  const [orderKey, setOrderKey] = useState<keyof Nivel>("id");
+  const [orderValue, setOrderValue] = useState<"ASC" | "DESC">("ASC");
+
 
   const paginationInfo = useMemo(() => {
     const start = (page - 1) * (meta?.per_page ?? 0) + 1;
@@ -36,7 +39,7 @@ function NivelPage() {
     setIsLoading(true);
 
     try {
-      const { data, meta } = await NivelService.findAll(page);
+      const { data, meta } = await NivelService.findAll(page, searchTerm, orderKey, orderValue);
 
       setNiveis(data);
       setMeta(meta);
@@ -46,14 +49,14 @@ function NivelPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [page]);
+  }, [page, searchTerm, orderKey, orderValue]);
 
   const searchNiveis = useCallback(async () => {
     setIsLoading(true);
     setPage(1);
 
     try {
-      const { data, meta } = await NivelService.findAll(page, searchTerm);
+      const { data, meta } = await NivelService.findAll(page, searchTerm, orderKey, orderValue);
 
       setNiveis(data);
       setMeta(meta);
@@ -63,7 +66,7 @@ function NivelPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [page, searchTerm]);
+  }, [page, searchTerm, orderKey, orderValue]);
 
   useEffect(() => {
     const searchTermHaveMinLength = searchTerm.length >= 3;
@@ -81,7 +84,7 @@ function NivelPage() {
 
   useEffect(() => {
     fetchNiveis();
-  }, [page]);
+  }, [page, orderKey, orderValue]);
 
   const handleClickUpdateNivel = useCallback((nivel: Nivel) => {
     setNivelSelectedToUpdate(nivel);
@@ -91,6 +94,11 @@ function NivelPage() {
   const handleClickDeleteNivel = useCallback((nivelId: number) => {
     setNivelIdSelectedToDelete(nivelId);
     setShowDeleteNivelModal(true);
+  }, []);
+
+  const handleSort = useCallback((key: keyof Nivel) => {
+    setOrderKey(key);
+    setOrderValue((prev) => (prev === "ASC" ? "DESC" : "ASC"));
   }, []);
 
   return (
@@ -140,8 +148,20 @@ function NivelPage() {
         <Table.Root variant="outline" size="lg">
           <Table.Header>
             <Table.Row>
-              <Table.ColumnHeader p={3}><strong>ID</strong></Table.ColumnHeader>
-              <Table.ColumnHeader><strong>Nível</strong></Table.ColumnHeader>
+              <Table.ColumnHeader p={3} onClick={() => handleSort("id")}>
+                <Flex alignItems="center" gap={2}>
+                  <strong>ID</strong>
+                  {orderKey === "id" && (orderValue === "ASC" ? <FaSortUp /> : <FaSortDown />)}
+                </Flex>
+              </Table.ColumnHeader>
+
+              <Table.ColumnHeader onClick={() => handleSort("nivel")}>
+                <Flex alignItems="center" gap={2}>
+                  <strong>Nível</strong>
+                  {orderKey === "nivel" && (orderValue === "ASC" ? <FaSortUp /> : <FaSortDown />)}
+                </Flex>
+              </Table.ColumnHeader>
+
               <Table.ColumnHeader
                 pr={8}
                 textAlign="end"
