@@ -1,12 +1,12 @@
 import { PaginatedContent } from "@/@types/pagination";
 import { Desenvolvedor } from "@/models/desenvolvedor";
 import { useCallback, useEffect, useMemo, useState, JSX } from "react";
-import DesenvolvedorService from "./service";
+import DesenvolvedorService, { DesenvolvedorKeysToOrder } from "./service";
 import { Box, Flex, IconButton, Input, Table } from "@chakra-ui/react";
 import Loading from "./components/Loading";
 import { Toaster } from "@/components/ui/toaster";
 import { Button } from "@/components/ui/button";
-import { FaEdit, FaTrashAlt } from "react-icons/fa";
+import { FaEdit, FaTrashAlt, FaSortUp, FaSortDown } from "react-icons/fa";
 import { FcNext, FcPrevious } from "react-icons/fc";
 import { BsGenderFemale, BsGenderMale } from "react-icons/bs";
 import { TbGenderGenderless } from "react-icons/tb";
@@ -14,19 +14,18 @@ import { CreateDesenvolvedorModal } from "./components/CreateDesenvolvedorModal"
 import { DeleteDesenvolvedorModal } from "./components/DeleteDesenvolvedorModal";
 import { UpdateDesenvolvedorModal } from "./components/UpdateDesenvolvedorModal";
 
-
-function DesenvolvedorPage(){
+function DesenvolvedorPage() {
   const [desenvolvedores, setDesenvolvedores] = useState<Desenvolvedor[]>([]);
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [meta, setMeta] = useState<PaginatedContent<Desenvolvedor>["meta"]>();
+  const [orderKey, setOrderKey] = useState<DesenvolvedorKeysToOrder>("id");
+  const [orderValue, setOrderValue] = useState<"ASC" | "DESC">("ASC");
 
   const [showCreateDesenvolvedorModal, setShowCreateDesenvolvedorModal] = useState(false);
-
   const [showDeleteDesenvolvedorModal, setShowDeleteDesenvolvedorModal] = useState(false);
   const [desenvolvedorIdSelectedToDelete, setDesenvolvedorIdSelectedToDelete] = useState<number>();
-
   const [showUpdateDesenvolvedorModal, setShowUpdateDesenvolvedorModal] = useState(false);
   const [desenvolvedorSelectedToUpdate, setDesenvolvedorSelectedToUpdate] = useState<Desenvolvedor>();
 
@@ -34,7 +33,7 @@ function DesenvolvedorPage(){
     "M": <BsGenderMale />,
     "F": <BsGenderFemale />,
     "P": <TbGenderGenderless />,
-  }
+  };
 
   const paginationInfo = useMemo(() => {
     const start = (page - 1) * (meta?.per_page ?? 0) + 1;
@@ -48,7 +47,7 @@ function DesenvolvedorPage(){
     setIsLoading(true);
 
     try {
-      const { data, meta } = await DesenvolvedorService.findAll(page);
+      const { data, meta } = await DesenvolvedorService.findAll(page, searchTerm, orderKey, orderValue);
 
       setDesenvolvedores(data);
       setMeta(meta);
@@ -58,14 +57,14 @@ function DesenvolvedorPage(){
     } finally {
       setIsLoading(false);
     }
-  }, [page]);
+  }, [page, searchTerm, orderKey, orderValue]);
 
   const searchDesenvolvedores = useCallback(async () => {
     setIsLoading(true);
     setPage(1);
 
     try {
-      const { data, meta } = await DesenvolvedorService.findAll(page, searchTerm);
+      const { data, meta } = await DesenvolvedorService.findAll(page, searchTerm, orderKey, orderValue);
 
       setDesenvolvedores(data);
       setMeta(meta);
@@ -75,7 +74,7 @@ function DesenvolvedorPage(){
     } finally {
       setIsLoading(false);
     }
-  }, [page, searchTerm]);
+  }, [page, searchTerm, orderKey, orderValue]);
 
   useEffect(() => {
     const searchTermHaveMinLength = searchTerm.length >= 3;
@@ -93,7 +92,7 @@ function DesenvolvedorPage(){
 
   useEffect(() => {
     fetchDesenvolvedores();
-  }, [page]);
+  }, [page, orderKey, orderValue]);
 
   const handleClickUpdateDesenvolvedor = useCallback((desenvolvedor: Desenvolvedor) => {
     setDesenvolvedorSelectedToUpdate(desenvolvedor);
@@ -104,6 +103,11 @@ function DesenvolvedorPage(){
     setDesenvolvedorIdSelectedToDelete(desenvolvedorId);
     setShowDeleteDesenvolvedorModal(true);
   }, []);
+
+  const handleSort = (key: DesenvolvedorKeysToOrder) => {
+    setOrderKey(key);
+    setOrderValue((prev) => (prev === "ASC" ? "DESC" : "ASC"));
+  };
 
   return (
     <Flex justify="center">
@@ -152,16 +156,54 @@ function DesenvolvedorPage(){
         <Table.Root variant="outline" size="lg">
           <Table.Header>
             <Table.Row>
-              <Table.ColumnHeader p={3}><strong>ID</strong></Table.ColumnHeader>
-              <Table.ColumnHeader><strong>Nome</strong></Table.ColumnHeader>
-              <Table.ColumnHeader><strong>Nível</strong></Table.ColumnHeader>
-              <Table.ColumnHeader><strong>Sexo</strong></Table.ColumnHeader>
-              <Table.ColumnHeader><strong>Idade</strong></Table.ColumnHeader>
-              <Table.ColumnHeader><strong>Hobby</strong></Table.ColumnHeader>
+              <Table.ColumnHeader p={3} onClick={() => handleSort("id")}>
+                <Flex alignItems="center" gap={2}>
+                  <strong>ID</strong>
+                  {orderKey === "id" && (orderValue === "ASC" ? <FaSortUp /> : <FaSortDown />)}
+                </Flex>
+              </Table.ColumnHeader>
+
+              <Table.ColumnHeader onClick={() => handleSort("nome")}>
+                <Flex alignItems="center" gap={2}>
+                  <strong>Nome</strong>
+                  {orderKey === "nome" && (orderValue === "ASC" ? <FaSortUp /> : <FaSortDown />)}
+                </Flex>
+              </Table.ColumnHeader>
+
+              <Table.ColumnHeader onClick={() => handleSort("nivel_nome")}>
+                <Flex alignItems="center" gap={2}>
+                  <strong>Nível</strong>
+                  {orderKey === "nivel_nome" && (orderValue === "ASC" ? <FaSortUp /> : <FaSortDown />)}
+                </Flex>
+              </Table.ColumnHeader>
+
+              <Table.ColumnHeader onClick={() => handleSort("sexo")}>
+                <Flex alignItems="center" gap={2}>
+                  <strong>Sexo</strong>
+                  {orderKey === "sexo" && (orderValue === "ASC" ? <FaSortUp /> : <FaSortDown />)}
+                </Flex>
+              </Table.ColumnHeader>
+
+              <Table.ColumnHeader onClick={() => handleSort("data_nascimento")}>
+                <Flex alignItems="center" gap={2}>
+                  <strong>Idade</strong>
+                  {orderKey === "data_nascimento" && (orderValue === "ASC" ? <FaSortUp /> : <FaSortDown />)}
+                </Flex>
+              </Table.ColumnHeader>
+
+              <Table.ColumnHeader onClick={() => handleSort("hobby")}>
+                <Flex alignItems="center" gap={2}>
+                  <strong>Hobby</strong>
+                  {orderKey === "hobby" && (orderValue === "ASC" ? <FaSortUp /> : <FaSortDown />)}
+                </Flex>
+              </Table.ColumnHeader>
+
               <Table.ColumnHeader
                 pr={8}
                 textAlign="end"
-              ><strong>Ações</strong></Table.ColumnHeader>
+              >
+                <strong>Ações</strong>
+              </Table.ColumnHeader>
             </Table.Row>
           </Table.Header>
           <Table.Body>

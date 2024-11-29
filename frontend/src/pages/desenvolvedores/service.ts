@@ -3,6 +3,8 @@ import { DesenolvedorResponse, Desenvolvedor, DesenvolvedorCreate, Desenvolvedor
 import { Nivel } from "@/models/niveis";
 import HttpClient from "@/services/http.service";
 
+export type DesenvolvedorKeysToOrder = keyof Omit<Desenvolvedor, "nivelId" | "dataNascimento"> | 'nivel_nome' | 'data_nascimento';
+
 class DesenvolvedorService {
 
   public async findAllNiveis(): Promise<PaginatedContent<Nivel>> {
@@ -11,11 +13,19 @@ class DesenvolvedorService {
     return data;
   }
 
-  public async findAll(page: number, searchTerm?: string): Promise<PaginatedContent<Desenvolvedor>> {
-    const params = {
+  public async findAll(page: number, searchTerm?: string, orderKey?: DesenvolvedorKeysToOrder, orderValue?: "ASC" | "DESC"): Promise<PaginatedContent<Desenvolvedor>> {
+    const params: Record<string, string | DesenvolvedorKeysToOrder | 'ASC' | 'DESC'> = {
       page: String(page),
-      searchTerm,
-      limit: String(15),
+      limit: String(15)
+    }
+
+    if (orderKey && orderValue) {
+      params['orderKey'] = orderKey;
+      params['orderValue'] = orderValue;
+    }
+
+    if (searchTerm) {
+      params['searchTerm'] = searchTerm;
     }
 
     const { data } = await HttpClient.get("/desenvolvedores", { params });
@@ -24,6 +34,8 @@ class DesenvolvedorService {
       ...desenvolvedor,
       dataNascimento: new Date(desenvolvedor.data_nascimento),
     }));
+
+    console.log(desenolvedoresMapped);
 
     return {
       ...data,
