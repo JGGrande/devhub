@@ -22,6 +22,7 @@ import {
   SelectValueText,
 } from "@/components/ui/select";
 import { Nivel } from "@/models/niveis";
+import { useColorModeValue } from "@/components/ui/color-mode";
 
 type CreateDesenvolvedorModal = {
   show: boolean;
@@ -174,12 +175,12 @@ export const CreateDesenvolvedorModal = ({
         maxW="90%"
         onClick={(e) => e.stopPropagation()}
       >
-        <Text fontSize="2xl" mb={4} fontWeight="bold">
+        <Text fontSize="2xl" color="white" mb={4} fontWeight="bold">
           Cadastrar desenvolvedor
         </Text>
 
         <Box p={6} border="1px" borderColor="gray.300" borderRadius="md">
-          <Field required label="Nome" mb={6}>
+          <Field required color="white" label="Nome" mb={6}>
             <Input
               type="text"
               name="nome"
@@ -187,6 +188,7 @@ export const CreateDesenvolvedorModal = ({
               value={nome}
               onChange={(e) => setNome(e.target.value)}
               variant="subtle"
+              color={useColorModeValue("black", "white")}
               p={2}
             />
             {errors.nome && <Text color="red.500">{errors.nome}</Text>}
@@ -200,7 +202,7 @@ export const CreateDesenvolvedorModal = ({
             value={[nivelId.toString()]}
             onValueChange={({ value }) => setNivelId(+value[0])}
           >
-            <SelectLabel>Nível</SelectLabel>
+            <SelectLabel color="white">Nível</SelectLabel>
             <SelectTrigger>
               <SelectValueText p={2} placeholder="Escolha um nível" />
             </SelectTrigger>
@@ -222,7 +224,7 @@ export const CreateDesenvolvedorModal = ({
             value={[sexo]}
             onValueChange={({ value }) => setSexo(value[0])}
           >
-            <SelectLabel>Sexo</SelectLabel>
+            <SelectLabel color="white">Sexo</SelectLabel>
             <SelectTrigger>
               <SelectValueText p={2} />
             </SelectTrigger>
@@ -236,20 +238,21 @@ export const CreateDesenvolvedorModal = ({
           </SelectRoot>
           {errors.sexo && <Text color="red.500">{errors.sexo}</Text>}
 
-          <Field required label="Data de nascimento" mb={6}>
+          <Field required color="white" label="Data de nascimento" mb={6}>
             <Input
               type="date"
               variant="subtle"
+              color={useColorModeValue("black", "white")}
               p={2}
+              lang="pt-BR"
               value={dataNascimento.toISOString().split("T")[0]}
-              onChange={(e) => setDataNascimento(e.target.valueAsDate!)}
+              onChange={(e) => setDataNascimento(e.target.valueAsDate ?? new Date())}
             />
             {errors.dataNascimento && (
               <Text color="red.500">{errors.dataNascimento}</Text>
             )}
           </Field>
-
-          <Field required label="Hobby">
+            <Field color="white" required label="Hobby">
             <Input
               type="text"
               name="text"
@@ -258,16 +261,17 @@ export const CreateDesenvolvedorModal = ({
               onChange={(e) => setHobby(e.target.value)}
               variant="subtle"
               p={2}
+              color={useColorModeValue("black", "white")}
             />
             {errors.hobby && <Text color="red.500">{errors.hobby}</Text>}
-          </Field>
+            </Field>
         </Box>
 
         <Flex justify="flex-end" gap={3}>
-          <Button p={2} variant="ghost" onClick={closeModal}>
+          <Button p={2} _hover={{ bg: "GrayText" }} color="white" variant="ghost" onClick={closeModal}>
             Cancelar
           </Button>
-          <Button p={2} colorScheme="blue" onClick={handleCreate}>
+          <Button p={2} bgColor="green.500" onClick={handleCreate}>
             {loading ? <Spinner size="sm" /> : <>Cadastrar</>}
           </Button>
         </Flex>

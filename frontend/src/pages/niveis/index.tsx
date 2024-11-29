@@ -170,7 +170,9 @@ function NivelPage() {
                       aria-label="Editar"
                       onClick={() => handleClickUpdateNivel(nivel)}
                       variant="solid"
+                      bgColor="orange.500"
                       size="sm"
+                      color="white"
                     >
                       <FaEdit />
                     </IconButton>
@@ -178,9 +180,10 @@ function NivelPage() {
                       aria-label="Excluir"
                       onClick={() => handleClickDeleteNivel(nivel.id)}
                       variant="surface"
+                      bgColor="red.500"
                       size="sm"
                     >
-                      <FaTrashAlt />
+                      <FaTrashAlt color="white" />
                     </IconButton>
                   </Flex>
                 </Table.Cell>

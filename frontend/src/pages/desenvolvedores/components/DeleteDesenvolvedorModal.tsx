@@ -89,14 +89,14 @@ export const DeleteDesenvolvedorModal = ({
         maxW="90%"
         onClick={(e) => e.stopPropagation()}
       >
-        <Text fontSize="2xl" mb={4} fontWeight="bold">
+        <Text fontSize="2xl" color="white" mb={4} fontWeight="bold">
           Deseja deletar desenvolvedor?
         </Text>
         <Flex justify="flex-end" gap={3}>
-          <Button p={2} variant="ghost" onClick={closeModal}>
+          <Button p={2} _hover={{ bg: "GrayText" }} color="white" variant="ghost" onClick={closeModal}>
             Cancelar
           </Button>
-          <Button p={2} bgColor="red" onClick={handleDelete}>
+          <Button p={2} bgColor="red.500" onClick={handleDelete}>
             {loading ? (
               <Spinner size="sm" />
             ) : (

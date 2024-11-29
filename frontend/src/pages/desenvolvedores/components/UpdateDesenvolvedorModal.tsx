@@ -23,6 +23,7 @@ import { useCallback, useEffect, useState } from "react";
 import DesenvolvedorService from "../service";
 import { desenvolvedorIsValidToSave } from "../validations";
 import { Desenvolvedor } from "@/models/desenvolvedor";
+import { useColorModeValue } from "@/components/ui/color-mode";
 
 type UpdateDesenvolvedorModalProps = {
   show: boolean;
@@ -163,12 +164,12 @@ export const UpdateDesenvolvedorModal = ({
         maxW="90%"
         onClick={(e) => e.stopPropagation()}
       >
-        <Text fontSize="2xl" mb={4} fontWeight="bold">
+        <Text fontSize="2xl" mb={4} color="white" fontWeight="bold">
           Editar desenvolvedor
         </Text>
 
         <Box p={6} border="1px" borderColor="gray.300" borderRadius="md">
-          <Field required label="Nome" mb={6}>
+          <Field required color="white" label="Nome" mb={6}>
             <Input
               type="text"
               name="nome"
@@ -177,6 +178,7 @@ export const UpdateDesenvolvedorModal = ({
               onChange={(e) => setNome(e.target.value)}
               variant="subtle"
               p={2}
+              color={useColorModeValue("black", "white")}
             />
             {errors.nome && <Text color="red.500">{errors.nome}</Text>}
           </Field>
@@ -189,7 +191,7 @@ export const UpdateDesenvolvedorModal = ({
             value={[nivelId.toString()]}
             onValueChange={({ value }) => setNivelId(+value[0])}
           >
-            <SelectLabel>Nível</SelectLabel>
+            <SelectLabel color="white">Nível</SelectLabel>
             <SelectTrigger>
               <SelectValueText p={2} placeholder="Escolha um nível" />
             </SelectTrigger>
@@ -211,7 +213,7 @@ export const UpdateDesenvolvedorModal = ({
             value={[sexo]}
             onValueChange={({ value }) => setSexo(value[0])}
           >
-            <SelectLabel>Sexo</SelectLabel>
+            <SelectLabel color="white">Sexo</SelectLabel>
             <SelectTrigger>
               <SelectValueText p={2} />
             </SelectTrigger>
@@ -225,20 +227,22 @@ export const UpdateDesenvolvedorModal = ({
           </SelectRoot>
           {errors.sexo && <Text color="red.500">{errors.sexo}</Text>}
 
-          <Field required label="Data de nascimento" mb={6}>
+          <Field required color="white" label="Data de nascimento" mb={6}>
             <Input
               type="date"
               variant="subtle"
               p={2}
+              lang="pt-BR"
               value={dataNascimento.toISOString().split("T")[0]}
-              onChange={(e) => setDataNascimento(e.target.valueAsDate!)}
+              onChange={(e) => setDataNascimento(e.target.valueAsDate ?? new Date())}
+              color={useColorModeValue("black", "white")}
             />
             {errors.dataNascimento && (
               <Text color="red.500">{errors.dataNascimento}</Text>
             )}
           </Field>
 
-          <Field required label="Hobby">
+          <Field required color="white" label="Hobby">
             <Input
               type="text"
               name="text"
@@ -247,16 +251,17 @@ export const UpdateDesenvolvedorModal = ({
               onChange={(e) => setHobby(e.target.value)}
               variant="subtle"
               p={2}
+              color={useColorModeValue("black", "white")}
             />
             {errors.hobby && <Text color="red.500">{errors.hobby}</Text>}
           </Field>
         </Box>
 
         <Flex justify="flex-end" gap={3}>
-          <Button p={2} variant="ghost" onClick={closeModal}>
+          <Button p={2} _hover={{ bg: "GrayText" }} color="white" variant="ghost" onClick={closeModal}>
             Cancelar
           </Button>
-          <Button p={2} colorScheme="blue" onClick={handleSave}>
+          <Button p={2} bgColor="orange.500" onClick={handleSave}>
             {loading ? <Spinner size="sm" /> : <>Salvar</>}
           </Button>
         </Flex>

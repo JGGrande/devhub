@@ -82,8 +82,8 @@ export function VerticalSlideBar({ isCollapsed, setIsCollapsed }: VerticalSlideB
         >
           {
             isCollapsed
-              ? <AiOutlineMenuUnfold />
-              : <AiOutlineMenuFold />
+              ? <AiOutlineMenuUnfold color="white" />
+              : <AiOutlineMenuFold  color="white"/>
           }
         </Button>
       </Box>

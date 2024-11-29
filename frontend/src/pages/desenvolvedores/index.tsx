@@ -134,7 +134,7 @@ function DesenvolvedorPage(){
 
         <Flex justify="space-between" mb={4}>
           <Input
-            placeholder="Buscar níveis..."
+            placeholder="Buscar desenvolvedores..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             width="300px"
@@ -198,16 +198,18 @@ function DesenvolvedorPage(){
                       onClick={() => handleClickUpdateDesenvolvedor(desenvolvedor)}
                       variant="solid"
                       size="sm"
+                      bgColor="orange.500"
                     >
-                      <FaEdit />
+                      <FaEdit color="white" />
                     </IconButton>
                     <IconButton
                       aria-label="Excluir"
                       onClick={() => handleClickDeleteDesenvolvedor(desenvolvedor.id)}
                       variant="surface"
                       size="sm"
+                      bgColor="red.500"
                     >
-                      <FaTrashAlt />
+                      <FaTrashAlt color="white" />
                     </IconButton>
                   </Flex>
                 </Table.Cell>

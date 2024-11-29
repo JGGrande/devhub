@@ -78,7 +78,7 @@ export const DeleteNivelModal = ({ show, closeModal, updateContentTable, nivelId
         p={6}
         rounded="md"
         shadow="lg"
-        w="500px"
+        w="450px"
         maxW="90%"
         onClick={(e) => e.stopPropagation()}
       >
@@ -86,14 +86,15 @@ export const DeleteNivelModal = ({ show, closeModal, updateContentTable, nivelId
           fontSize="2xl"
           mb={4}
           fontWeight="bold"
+          color="white"
         >
           Deseja deletar nível?
         </Text>
         <Flex justify="flex-end" gap={3}>
-          <Button p={2} variant="ghost" onClick={closeModal}>
+          <Button p={2} _hover={{ bg: "GrayText" }} color="white" variant="ghost" onClick={closeModal}>
             Cancelar
           </Button>
-          <Button p={2} bgColor="red" onClick={handleDelete}>
+          <Button p={2} bgColor="red.500" onClick={handleDelete}>
             {loading ? (<Spinner size="sm" />) : (<Text color="white">Deletar</Text>)}
           </Button>
         </Flex>

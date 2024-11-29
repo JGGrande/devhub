@@ -5,6 +5,7 @@ import { Box, Flex, Input, Spinner, Text } from "@chakra-ui/react";
 import { AxiosError } from "axios";
 import { useCallback, useState } from "react";
 import NivelService from "../service";
+import { useColorModeValue } from "@/components/ui/color-mode";
 
 type UpdateNivelModalProps = {
   show: boolean;
@@ -93,6 +94,7 @@ export const UpdateNivelModal = ({ show, closeModal, updateContentTable, nivel }
           fontSize="2xl"
           mb={4}
           fontWeight="bold"
+          color="white"
         >
           Alterar Nível
         </Text>
@@ -103,6 +105,7 @@ export const UpdateNivelModal = ({ show, closeModal, updateContentTable, nivel }
           mb={4}
           variant="subtle"
           p={2}
+          color={useColorModeValue("black", "white")}
         />
         {error && (
           <Text color="red.500" mb={4}>
@@ -110,10 +113,10 @@ export const UpdateNivelModal = ({ show, closeModal, updateContentTable, nivel }
           </Text>
         )}
         <Flex justify="flex-end" gap={3}>
-          <Button p={2} variant="ghost" onClick={closeModal}>
+          <Button p={2} _hover={{ bg: "GrayText" }} color="white" variant="ghost" onClick={closeModal}>
             Cancelar
           </Button>
-          <Button p={2} colorScheme="blue" onClick={handleUpdate}>
+          <Button p={2} bgColor="orange.500" colorScheme="blue" onClick={handleUpdate}>
             {loading ? (<Spinner size="sm" />) : (<>Alterar</>)}
           </Button>
         </Flex>

@@ -4,6 +4,7 @@ import { Box, Flex, Input, Spinner, Text } from "@chakra-ui/react";
 import { useCallback, useState } from "react";
 import NivelService from "../service";
 import { AxiosError } from "axios";
+import { useColorModeValue } from "@/components/ui/color-mode";
 
 type CreateNivelModalProps = {
   show: boolean;
@@ -88,6 +89,7 @@ export const CreateNivelModal = ({ show, closeModal, updateContentTable }: Creat
           fontSize="2xl"
           mb={4}
           fontWeight="bold"
+          color="white"
         >
           Cadastrar Nível
         </Text>
@@ -98,6 +100,7 @@ export const CreateNivelModal = ({ show, closeModal, updateContentTable }: Creat
           mb={4}
           variant="subtle"
           p={2}
+          color={useColorModeValue("black", "white")}
         />
         {error && (
           <Text color="red.500" mb={4}>
@@ -105,10 +108,10 @@ export const CreateNivelModal = ({ show, closeModal, updateContentTable }: Creat
           </Text>
         )}
         <Flex justify="flex-end" gap={3}>
-          <Button p={2} variant="ghost" onClick={closeModal}>
+          <Button p={2} _hover={{ bg: "GrayText" }} color="white" variant="ghost" onClick={closeModal}>
             Cancelar
           </Button>
-          <Button p={2} colorScheme="blue" onClick={handleCreate}>
+          <Button p={2} bgColor="green.500" colorScheme="blue" onClick={handleCreate}>
             {loading ? (<Spinner size="sm" />) : (<>Cadastrar</>)}
           </Button>
         </Flex>
